@@ -14,16 +14,59 @@ const formatAnimeName = (name) => {
     .join(" ");
 };
 
+// poster cache utility (stored separately so other pages can update continueWatching without removing posters)
+const POSTER_CACHE_KEY = "continueWatchingPosters";
+
+const readPosterCache = () => {
+  try {
+    return JSON.parse(localStorage.getItem(POSTER_CACHE_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+};
+
+const writePosterCache = (cache) => {
+  try {
+    localStorage.setItem(POSTER_CACHE_KEY, JSON.stringify(cache));
+  } catch (e) {
+    // ignore quota errors for now
+    console.warn("Could not write poster cache:", e?.message || e);
+  }
+};
+
+const setPosterCacheEntry = (animeId, posterUrl) => {
+  if (!animeId || !posterUrl) return;
+  const cache = readPosterCache();
+  if (cache[animeId] === posterUrl) return;
+  cache[animeId] = posterUrl;
+  writePosterCache(cache);
+};
+
 const ContinueWatching = () => {
   const [continueList, setContinueList] = useState([]);
   const navigate = useNavigate();
   const triedFetchRef = useRef(new Set());
   const isMountedRef = useRef(true);
 
+  // Merge stored continueWatching with poster cache (so when some other page updates continueWatching
+  // without poster, we still reapply our saved poster)
+  const mergeStoredWithPosterCache = (stored) => {
+    const cache = readPosterCache();
+    return stored.map((it) => {
+      if (!it) return it;
+      if (!it.poster && it.animeId && cache[it.animeId]) {
+        return { ...it, poster: cache[it.animeId] };
+      }
+      return it;
+    });
+  };
+
   useEffect(() => {
+    isMountedRef.current = true;
     try {
       const stored = JSON.parse(localStorage.getItem("continueWatching")) || [];
-      setContinueList(stored.slice(0, 60));
+      const merged = mergeStoredWithPosterCache(stored).slice(0, 60);
+      setContinueList(merged);
     } catch (err) {
       console.error("Failed to parse continueWatching from localStorage:", err);
       setContinueList([]);
@@ -34,10 +77,17 @@ const ContinueWatching = () => {
     };
   }, []);
 
+  // Effect: fetch posters for items that don't have one, and save them into both continueWatching and posterCache
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("continueWatching")) || [];
+    // filter animeIds that don't have poster in stored but may have in cache; only fetch if missing entirely
+    const posterCache = readPosterCache();
     const animeIdsToFetch = [
-      ...new Set(stored.filter((i) => !i?.poster).map((i) => i.animeId)),
+      ...new Set(
+        stored
+          .filter((i) => i && !i.poster && !posterCache[i.animeId])
+          .map((i) => i.animeId)
+      ),
     ];
 
     if (animeIdsToFetch.length === 0) return;
@@ -45,7 +95,7 @@ const ContinueWatching = () => {
     let mounted = true;
 
     (async () => {
-      const updated = [...stored];
+      const updated = mergeStoredWithPosterCache(stored); // apply any cached posters first
 
       for (const animeId of animeIdsToFetch) {
         if (!animeId || triedFetchRef.current.has(animeId)) continue;
@@ -61,6 +111,10 @@ const ContinueWatching = () => {
             null;
 
           if (image) {
+            // save to cache
+            setPosterCacheEntry(animeId, image);
+
+            // update local copy
             for (let i = 0; i < updated.length; i++) {
               if (updated[i].animeId === animeId && !updated[i].poster) {
                 updated[i] = { ...updated[i], poster: image };
@@ -75,7 +129,12 @@ const ContinueWatching = () => {
       if (mounted && isMountedRef.current) {
         const sliced = updated.slice(0, 60);
         setContinueList(sliced);
-        localStorage.setItem("continueWatching", JSON.stringify(sliced));
+        try {
+          // persist merged list (so poster persists in continueWatching as well)
+          localStorage.setItem("continueWatching", JSON.stringify(sliced));
+        } catch (e) {
+          console.warn("Failed to write continueWatching to localStorage:", e?.message || e);
+        }
       }
     })();
 
@@ -88,6 +147,10 @@ const ContinueWatching = () => {
     if (!animeId || triedFetchRef.current.has(animeId)) return null;
     triedFetchRef.current.add(animeId);
 
+    // check poster cache first
+    const cache = readPosterCache();
+    if (cache[animeId]) return cache[animeId];
+
     try {
       const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
       const image =
@@ -98,14 +161,22 @@ const ContinueWatching = () => {
         null;
 
       if (image) {
+        // update state and localStorage
         setContinueList((prev) => {
-          const updated = prev.map((it) => (it.animeId === animeId && !it.poster ? { ...it, poster: image } : it));
+          const updated = prev.map((it) =>
+            it && it.animeId === animeId && !it.poster ? { ...it, poster: image } : it
+          );
           try {
             localStorage.setItem("continueWatching", JSON.stringify(updated));
           } catch (e) {
+            console.warn("Failed to write continueWatching to localStorage:", e?.message || e);
           }
           return updated;
         });
+
+        // update poster cache
+        setPosterCacheEntry(animeId, image);
+
         return image;
       }
     } catch (err) {
@@ -122,9 +193,15 @@ const ContinueWatching = () => {
 
   const handleRemove = (index) => {
     const updated = [...continueList];
-    updated.splice(index, 1);
+    const removed = updated.splice(index, 1);
     setContinueList(updated);
-    localStorage.setItem("continueWatching", JSON.stringify(updated));
+    try {
+      localStorage.setItem("continueWatching", JSON.stringify(updated));
+    } catch (e) {
+      console.warn("Failed to write continueWatching to localStorage:", e?.message || e);
+    }
+    // NOTE: we intentionally keep the poster cache so poster will still be available if same anime is re-added.
+    // If you want posters removed when an item is removed, remove from POSTER_CACHE_KEY here.
   };
 
   if (!Array.isArray(continueList) || continueList.length === 0) return null;
