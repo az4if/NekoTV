@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { FaArrowCircleRight, FaBars, FaSearch, FaTimes } from "react-icons/fa";
+import { FaArrowCircleRight, FaBars, FaSearch, FaTimes, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../services/useApi";
 import Logo from "./Logo";
@@ -8,48 +8,29 @@ import Loader from "./Loader";
 
 const Header = () => {
   const sidebarHandler = useSidebarStore((state) => state.toggleSidebar);
-  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const [value, setValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
   const timeoutRef = useRef(null);
   const inputRef = useRef(null);
-  const searchContainerRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (showSearchBar && inputRef.current) {
-      inputRef.current.focus();
+    if (showSearchModal && inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 100);
     }
-  }, [showSearchBar]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current.contains(e.target)
-      ) {
-        resetSearch();
-      }
-    };
-
-    if (showSearchBar) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showSearchBar]);
+  }, [showSearchModal]);
 
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === "Escape" && showSearchBar) {
-        resetSearch();
+      if (e.key === "Escape" && showSearchModal) {
+        closeSearchModal();
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [showSearchBar]);
+  }, [showSearchModal]);
 
   const changeInput = (e) => {
     const newValue = e.target.value;
@@ -70,7 +51,7 @@ const Header = () => {
       e.preventDefault();
       if (value.trim()) {
         navigate(`/search?keyword=${value.trim()}`);
-        resetSearch();
+        closeSearchModal();
       }
     },
     [value, navigate]
@@ -79,16 +60,22 @@ const Header = () => {
   const navigateToAnimePage = useCallback(
     (id) => {
       navigate(`/anime/${id}`);
-      resetSearch();
+      closeSearchModal();
     },
     [navigate]
   );
 
-  const resetSearch = useCallback(() => {
+  const openSearchModal = useCallback(() => {
+    setShowSearchModal(true);
+    document.body.style.overflow = "hidden";
+  }, []);
+
+  const closeSearchModal = useCallback(() => {
+    setShowSearchModal(false);
     setValue("");
     setDebouncedValue("");
-    setShowSearchBar(false);
     clearTimeout(timeoutRef.current);
+    document.body.style.overflow = "unset";
   }, []);
 
   const clearInput = useCallback(() => {
@@ -99,132 +86,161 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="relative z-[100]" ref={searchContainerRef}>
-      <div className="fixed w-full py-2 shadow-md bg-gradient-to-r from-gray-900/80 via-gray-800/50 to-gray-900/80 backdrop-blur-md">
-        <div className="flex gap-2 px-5 md:px-10 md:gap-5 justify-between items-center">
-          <div className="left flex gap-2 md:gap-5 items-center">
-            <button
-              onClick={sidebarHandler}
-              aria-label="Toggle sidebar"
-              className="p-1 hover:text-primary transition-colors"
-            >
-              <FaBars size={25} />
-            </button>
-            <Logo />
-          </div>
+    <>
+      <div className="relative z-40">
+        <div className="fixed w-full py-2 shadow-md bg-gradient-to-r from-gray-900/80 via-gray-800/50 to-gray-900/80 backdrop-blur-md">
+          <div className="flex gap-2 px-5 md:px-10 md:gap-5 justify-between items-center">
+            <div className="left flex gap-2 md:gap-5 items-center">
+              <button
+                onClick={sidebarHandler}
+                aria-label="Toggle sidebar"
+                className="p-1 hover:text-primary transition-colors"
+              >
+                <FaBars size={25} />
+              </button>
+              <Logo />
+            </div>
 
-          <div className="right flex gap-3 md:gap-5 items-center">
-            <button
-              aria-label={showSearchBar ? "Close search" : "Open search"}
-              onClick={() => setShowSearchBar(!showSearchBar)}
-              className="p-1.5 hover:text-primary transition-colors"
-            >
-              {showSearchBar ? <FaTimes size={22} /> : <FaSearch size={20} />}
-            </button>
-          </div>
-        </div>
-        <form
-          onSubmit={handleSubmit}
-          className={`mt-2 px-4 transition-all duration-300 ${
-            showSearchBar ? "flex" : "hidden"
-          }`}
-        >
-          <div className="relative flex items-center w-full">
-            <input
-              ref={inputRef}
-              value={value}
-              onChange={changeInput}
-              placeholder="Search anime..."
-              type="text"
-              aria-label="Search anime"
-              className="w-full bg-gray-800 text-white py-2.5 pl-4 pr-12 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <div className="absolute right-3 flex gap-2">
-              {value.length > 0 && (
-                <button
-                  type="button"
-                  onClick={clearInput}
-                  aria-label="Clear search"
-                  className="text-gray-400 hover:text-white p-1"
-                >
-                  <FaTimes size={18} />
-                </button>
-              )}
+            <div className="right flex gap-3 md:gap-5 items-center">
               <button
-                type="submit"
-                aria-label="Submit search"
-                className="text-primary hover:text-primary-light p-1"
+                aria-label="Open search"
+                onClick={openSearchModal}
+                className="p-1.5 hover:text-primary transition-colors"
               >
-                <FaSearch size={18} />
+                <FaSearch size={20} />
               </button>
             </div>
           </div>
-        </form>
-        <div
-          className={`bg-gray-800 mt-1 mx-4 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
-            showSearchBar && value.length > 2 ? "block" : "hidden"
-          }`}
-        >
-          {isLoading ? (
-            <div className="py-6 flex justify-center">
-              <Loader size="small" />
-            </div>
-          ) : isError ? (
-            <div className="py-4 text-center text-red-300">
-              Failed to load suggestions
-            </div>
-          ) : data && data.data.length > 0 ? (
-            <>
-              <div className="max-h-[60vh] overflow-y-auto">
-                {data.data.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => navigateToAnimePage(item.id)}
-                    className="flex p-3 hover:bg-gray-700 transition-colors cursor-pointer"
-                  >
-                    <div className="flex-shrink-0 w-16 h-20 relative">
-                      <img
-                        src={item.poster}
-                        alt={item.title}
-                        className="w-full h-full object-cover rounded"
-                      />
-                    </div>
-                    <div className="ml-3 flex-1 min-w-0">
-                      <h4 className="font-medium text-white truncate">
-                        {item.title}
-                      </h4>
-                      <p className="text-sm text-gray-300 truncate">
-                        {item.alternativeTitle}
-                      </p>
-                      <div className="flex items-center mt-1 text-xs text-gray-400">
-                        <span>{item.aired}</span>
-                        <span className="mx-2">•</span>
-                        <span>{item.type}</span>
-                        <span className="mx-2">•</span>
-                        <span>{item.duration}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={handleSubmit}
-                className="w-full py-3 bg-primary hover:bg-primary-dark text-black font-bold flex items-center justify-center gap-2"
-              >
-                View All Results
-                <FaArrowCircleRight />
-              </button>
-            </>
-          ) : (
-            debouncedValue.length > 2 && (
-              <div className="py-6 text-center text-gray-400">
-                No results found for "{debouncedValue}"
-              </div>
-            )
-          )}
         </div>
       </div>
-    </div>
+
+      {/* Search Modal Overlay */}
+      {showSearchModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={closeSearchModal}
+          />
+          
+          {/* Modal Content */}
+          <div className="relative flex items-start justify-center pt-16 md:pt-24 px-4">
+            <div className="relative w-full max-w-2xl bg-gray-900 rounded-xl shadow-2xl overflow-hidden border border-gray-700">
+              {/* Search Input */}
+              <div className="p-4 border-b border-gray-700">
+                <form onSubmit={handleSubmit} className="relative">
+                  <div className="relative flex items-center">
+                    <FaSearch className="absolute left-4 text-gray-400" size={18} />
+                    <input
+                      ref={inputRef}
+                      value={value}
+                      onChange={changeInput}
+                      placeholder="Search for anime..."
+                      type="text"
+                      aria-label="Search anime"
+                      className="w-full bg-gray-800 text-white py-3 pl-12 pr-16 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    {value.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={clearInput}
+                        aria-label="Clear search"
+                        className="absolute right-11 text-gray-400 hover:text-white p-1"
+                      >
+                        <FaTimes size={18} />
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={closeSearchModal}
+                      aria-label="Close search"
+                      className="absolute right-3 text-gray-400 hover:text-white p-1"
+                    >
+                      <FaTimes size={20} />
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Search Results */}
+              <div className="max-h-[60vh] overflow-y-auto">
+                {isLoading ? (
+                  <div className="py-8 flex justify-center">
+                    <Loader size="medium" />
+                  </div>
+                ) : isError ? (
+                  <div className="py-6 text-center text-red-300">
+                    Failed to load suggestions
+                  </div>
+                ) : data && data.data.length > 0 ? (
+                  <>
+                    {data.data.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => navigateToAnimePage(item.id)}
+                        className="flex p-4 hover:bg-gray-800/50 transition-colors cursor-pointer border-b border-gray-800 last:border-b-0"
+                      >
+                        <div className="flex-shrink-0 w-16 h-20 relative overflow-hidden rounded">
+                          <img
+                            src={item.poster}
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="ml-4 flex-1 min-w-0">
+                          <h4 className="font-semibold text-white truncate">
+                            {item.title}
+                          </h4>
+                          <p className="text-sm text-gray-300 truncate mt-1">
+                            {item.alternativeTitle}
+                          </p>
+                          <div className="flex flex-wrap items-center mt-2 text-xs text-gray-400 gap-2">
+                            <span className="bg-gray-700 px-2 py-1 rounded">
+                              {item.type}
+                            </span>
+                            <span>{item.aired}</span>
+                            <span>•</span>
+                            <span>{item.duration}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-center pl-2">
+                          <FaArrowRight className="text-gray-400" />
+                        </div>
+                      </div>
+                    ))}
+                    <button
+                      onClick={handleSubmit}
+                      className="w-full py-4 bg-primary hover:bg-primary-dark text-black font-bold flex items-center justify-center gap-2 transition-colors"
+                    >
+                      View All Results
+                      <FaArrowCircleRight size={20} />
+                    </button>
+                  </>
+                ) : (
+                  debouncedValue.length > 2 && (
+                    <div className="py-8 text-center text-gray-400">
+                      <div className="text-2xl mb-2">No results found</div>
+                      <p>Try different keywords or browse categories</p>
+                    </div>
+                  )
+                )}
+              </div>
+
+              {/* Empty state when no search query */}
+              {value.length === 0 && (
+                <div className="py-8 px-6 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800/50 mb-4">
+                    <FaSearch className="text-gray-400" size={24} />
+                  </div>
+                  <h3 className="text-lg font-medium text-white mb-2">Search Anime</h3>
+                  <p className="text-gray-400">Enter keywords to find your favorite anime</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
