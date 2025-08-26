@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from "../services/useApi";
@@ -17,6 +17,8 @@ const formatAnimeName = (name) => {
 const ContinueWatching = () => {
   const [continueList, setContinueList] = useState([]);
   const navigate = useNavigate();
+  const triedFetchRef = useRef(new Set());
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     try {
@@ -26,6 +28,10 @@ const ContinueWatching = () => {
       console.error("Failed to parse continueWatching from localStorage:", err);
       setContinueList([]);
     }
+
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -42,6 +48,9 @@ const ContinueWatching = () => {
       const updated = [...stored];
 
       for (const animeId of animeIdsToFetch) {
+        if (!animeId || triedFetchRef.current.has(animeId)) continue;
+        triedFetchRef.current.add(animeId);
+
         try {
           const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
           const image =
@@ -59,14 +68,11 @@ const ContinueWatching = () => {
             }
           }
         } catch (err) {
-          console.warn(
-            `Failed to fetch poster for animeId=${animeId}:`,
-            err?.message || err
-          );
+          console.warn(`Failed to fetch poster for animeId=${animeId}:`, err?.message || err);
         }
       }
 
-      if (mounted) {
+      if (mounted && isMountedRef.current) {
         const sliced = updated.slice(0, 60);
         setContinueList(sliced);
         localStorage.setItem("continueWatching", JSON.stringify(sliced));
@@ -77,6 +83,37 @@ const ContinueWatching = () => {
       mounted = false;
     };
   }, []);
+
+  const fetchPosterForAnime = async (animeId) => {
+    if (!animeId || triedFetchRef.current.has(animeId)) return null;
+    triedFetchRef.current.add(animeId);
+
+    try {
+      const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
+      const image =
+        res?.data?.data?.poster ||
+        res?.data?.data?.image ||
+        res?.data?.poster ||
+        res?.data?.image ||
+        null;
+
+      if (image) {
+        setContinueList((prev) => {
+          const updated = prev.map((it) => (it.animeId === animeId && !it.poster ? { ...it, poster: image } : it));
+          try {
+            localStorage.setItem("continueWatching", JSON.stringify(updated));
+          } catch (e) {
+          }
+          return updated;
+        });
+        return image;
+      }
+    } catch (err) {
+      console.warn(`fetchPosterForAnime failed for ${animeId}:`, err?.message || err);
+    }
+
+    return null;
+  };
 
   const handleClick = (animeId, epId) => {
     if (!animeId || !epId) return;
@@ -179,10 +216,15 @@ const ContinueWatching = () => {
                   loading="lazy"
                   src={thumb}
                   alt={item?.animeName || item?.animeId}
-                  onError={(e) => {
-                    e.currentTarget.src = `https://via.placeholder.com/320x180?text=${encodeURIComponent(
-                      formatAnimeName(item?.animeName || item?.animeId)
-                    )}`;
+                  onError={async (e) => {
+                    const newImage = await fetchPosterForAnime(item?.animeId);
+                    if (newImage) {
+                      e.currentTarget.src = newImage;
+                    } else {
+                      e.currentTarget.src = `https://via.placeholder.com/320x180?text=${encodeURIComponent(
+                        formatAnimeName(item?.animeName || item?.animeId)
+                      )}`;
+                    }
                   }}
                 />
               </div>
