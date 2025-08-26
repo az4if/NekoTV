@@ -156,7 +156,7 @@ const ContinueWatching = () => {
                     handleClick(item?.animeId, item?.episodeId);
                 }}
               >
-                <div className="w-full h-56 md:h-72 overflow-hidden rounded-md mb-2 bg-gray-200">
+                <div className="w-full h-56 md:h-75 overflow-hidden rounded-md mb-2 bg-gray-200">
                   <img
                     src={thumb}
                     alt={`${formatAnimeName(item?.animeName || item?.animeId)} poster`}
@@ -190,4 +190,5 @@ const ContinueWatching = () => {
 };
 
 export default ContinueWatching;
+
 
