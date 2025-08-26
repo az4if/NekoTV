@@ -114,7 +114,7 @@ const ContinueWatching = () => {
             >
               <button
                 aria-label="remove"
-                className="absolute top-3 right-6 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
+                className="absolute top-3 right-5 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
@@ -216,3 +216,4 @@ const ContinueWatching = () => {
 };
 
 export default ContinueWatching;
+
