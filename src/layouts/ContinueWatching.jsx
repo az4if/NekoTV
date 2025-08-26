@@ -43,7 +43,11 @@ const ContinueWatching = () => {
         try {
           const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
           const image =
-            res?.data?.data?.poster || res?.data?.data?.image || res?.data?.poster || res?.data?.image || null;
+            res?.data?.data?.poster ||
+            res?.data?.data?.image ||
+            res?.data?.poster ||
+            res?.data?.image ||
+            null;
 
           if (image) {
             for (let i = 0; i < updated.length; i++) {
@@ -53,7 +57,10 @@ const ContinueWatching = () => {
             }
           }
         } catch (err) {
-          console.warn(`Failed to fetch poster for animeId=${animeId}:`, err?.message || err);
+          console.warn(
+            `Failed to fetch poster for animeId=${animeId}:`,
+            err?.message || err
+          );
         }
       }
 
@@ -67,7 +74,7 @@ const ContinueWatching = () => {
     return () => {
       mounted = false;
     };
-  }, []); 
+  }, []);
 
   const handleClick = (animeId, epId) => {
     if (!animeId || !epId) return;
@@ -85,7 +92,9 @@ const ContinueWatching = () => {
 
   return (
     <div className="my-5">
-      <h2 className="text-xl font-bold text-[var(--primary)] mb-3">Continue Watching</h2>
+      <h2 className="text-xl font-bold text-[var(--primary)] mb-3">
+        Continue Watching
+      </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
         {continueList.map((item, index) => {
@@ -103,13 +112,39 @@ const ContinueWatching = () => {
             >
               <button
                 aria-label="remove"
-                className="absolute top-2 right-2 bg-red-500 rounded-md w-8 h-8 flex items-center justify-center z-10 shadow-md"
+                className="absolute top-2 right-2 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-10 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
                 }}
               >
-                <span className="text-black font-extrabold text-lg">✕</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                    stroke="black"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                    stroke="black"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
 
               <div
@@ -117,10 +152,11 @@ const ContinueWatching = () => {
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleClick(item?.animeId, item?.episodeId);
+                  if (e.key === "Enter")
+                    handleClick(item?.animeId, item?.episodeId);
                 }}
               >
-                <div className="w-full h-48 md:h-56 overflow-hidden rounded-md mb-2 bg-gray-200">
+                <div className="w-full h-56 md:h-64 overflow-hidden rounded-md mb-2 bg-gray-200">
                   <img
                     src={thumb}
                     alt={`${formatAnimeName(item?.animeName || item?.animeId)} poster`}
@@ -141,7 +177,8 @@ const ContinueWatching = () => {
                   Episode: {item?.episodeNumber ?? "-"} (ID: {item?.episodeId ?? "-"})
                 </p>
                 <p className="text-xs text-gray-300 mt-1">
-                  Last watched: {item?.lastWatched ? new Date(item.lastWatched).toLocaleString() : "-"}
+                  Last watched:{" "}
+                  {item?.lastWatched ? new Date(item.lastWatched).toLocaleString() : "-"}
                 </p>
               </div>
             </article>
