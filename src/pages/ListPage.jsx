@@ -113,7 +113,7 @@ const ListPage = () => {
             endMessage={<Footer />}
           >
             <Heading
-              className="text-[2.5rem] text-center mt-10 font-bold ml-0"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center mt-6 mb-6 font-bold ml-0"
               style={{ color: "var(--secondary)" }}
             >
               {displayTitle}
