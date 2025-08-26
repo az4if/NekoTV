@@ -108,7 +108,13 @@ const ListPage = () => {
             loader={<Loader className="h-fit" />}
             endMessage={<Footer />}
           >
-            <Heading>{displayTitle}</Heading>
+            <Heading
+              className="text-[2.5rem] text-center mt-10 font-bold ml-0"
+              style={{ color: "var(--secondary)" }}
+            >
+              {displayTitle}
+            </Heading>
+
             <div className="flex flex-wrap justify-around items-center">
               {pages?.map((page, pageIndex) => (
                 <React.Fragment key={pageIndex}>
