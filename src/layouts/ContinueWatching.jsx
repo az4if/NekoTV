@@ -17,7 +17,8 @@ const formatAnimeName = (name) => {
 const ContinueWatching = () => {
   const [continueList, setContinueList] = useState([]);
   const navigate = useNavigate();
-  const triedFetchRef = useRef(new Set());
+
+  const inProgressRef = useRef(new Set());
   const isMountedRef = useRef(true);
 
   useEffect(() => {
@@ -48,8 +49,8 @@ const ContinueWatching = () => {
       const updated = [...stored];
 
       for (const animeId of animeIdsToFetch) {
-        if (!animeId || triedFetchRef.current.has(animeId)) continue;
-        triedFetchRef.current.add(animeId);
+        if (!animeId || inProgressRef.current.has(animeId)) continue;
+        inProgressRef.current.add(animeId);
 
         try {
           const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
@@ -69,13 +70,18 @@ const ContinueWatching = () => {
           }
         } catch (err) {
           console.warn(`Failed to fetch poster for animeId=${animeId}:`, err?.message || err);
+        } finally {
+          inProgressRef.current.delete(animeId);
         }
       }
 
       if (mounted && isMountedRef.current) {
         const sliced = updated.slice(0, 60);
         setContinueList(sliced);
-        localStorage.setItem("continueWatching", JSON.stringify(sliced));
+        try {
+          localStorage.setItem("continueWatching", JSON.stringify(sliced));
+        } catch (e) {
+        }
       }
     })();
 
@@ -85,9 +91,10 @@ const ContinueWatching = () => {
   }, []);
 
   const fetchPosterForAnime = async (animeId) => {
-    if (!animeId || triedFetchRef.current.has(animeId)) return null;
-    triedFetchRef.current.add(animeId);
+    if (!animeId) return null;
+    if (inProgressRef.current.has(animeId)) return null;
 
+    inProgressRef.current.add(animeId);
     try {
       const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
       const image =
@@ -110,6 +117,8 @@ const ContinueWatching = () => {
       }
     } catch (err) {
       console.warn(`fetchPosterForAnime failed for ${animeId}:`, err?.message || err);
+    } finally {
+      inProgressRef.current.delete(animeId);
     }
 
     return null;
@@ -122,9 +131,16 @@ const ContinueWatching = () => {
 
   const handleRemove = (index) => {
     const updated = [...continueList];
-    updated.splice(index, 1);
-    setContinueList(updated);
-    localStorage.setItem("continueWatching", JSON.stringify(updated));
+    const removed = updated.splice(index, 1);
+    const removedAnimeId = removed?.[0]?.animeId;
+
+    const cleaned = updated.map((it) => (it.animeId === removedAnimeId ? { ...it, poster: undefined } : it));
+
+    setContinueList(cleaned);
+    try {
+      localStorage.setItem("continueWatching", JSON.stringify(cleaned));
+    } catch (e) {
+    }
   };
 
   if (!Array.isArray(continueList) || continueList.length === 0) return null;
@@ -216,7 +232,7 @@ const ContinueWatching = () => {
                   loading="lazy"
                   src={thumb}
                   alt={item?.animeName || item?.animeId}
-                  onError={async (e) => {
+                  onError={async (e) => {.
                     const newImage = await fetchPosterForAnime(item?.animeId);
                     if (newImage) {
                       e.currentTarget.src = newImage;
