@@ -12,12 +12,12 @@ const Header = () => {
   const [value, setValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
+  const [popularAnime, setPopularAnime] = useState([]);
   const timeoutRef = useRef(null);
   const inputRef = useRef(null);
   const searchContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  // Load search history from localStorage on component mount
   useEffect(() => {
     const savedHistory = localStorage.getItem('animeSearchHistory');
     if (savedHistory) {
@@ -25,7 +25,25 @@ const Header = () => {
     }
   }, []);
 
-  // Save search history to localStorage whenever it changes
+  useEffect(() => {
+    const fetchPopularAnime = async () => {
+      try {
+        const response = await fetch('/api/animes/most-popular?page=1');
+        const data = await response.json();
+        if (data && data.data && data.data.response) {
+          setPopularAnime(data.data.response.slice(0, 20).map(anime => anime.title));
+        }
+      } catch (error) {
+        console.error("Failed to fetch popular anime:", error);
+        setPopularAnime(['Jujutsu Kaisen', 'One Piece', 'Attack on Titan', 'Demon Slayer']);
+      }
+    };
+
+    if (showSearchBar) {
+      fetchPopularAnime();
+    }
+  }, [showSearchBar]);
+
   useEffect(() => {
     localStorage.setItem('animeSearchHistory', JSON.stringify(searchHistory));
   }, [searchHistory]);
@@ -83,7 +101,7 @@ const Header = () => {
     const updatedHistory = [
       searchTerm,
       ...searchHistory.filter(item => item !== searchTerm)
-    ].slice(0, 5); // Keep only the 5 most recent searches
+    ].slice(0, 7);
     
     setSearchHistory(updatedHistory);
   }, [searchHistory]);
@@ -196,11 +214,15 @@ const Header = () => {
           </div>
         </form>
         <div
-          className={`bg-gray-800 mt-1 mx-4 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
+          className={`mt-1 mx-4 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
             showSearchBar ? "block" : "hidden"
           }`}
+          style={{
+            background: 'rgba(17, 24, 39, 0.8)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}
         >
-          {/* Search History Section */}
           {value.length === 0 && searchHistory.length > 0 && (
             <div className="border-b border-gray-700">
               <div className="flex justify-between items-center p-3">
@@ -220,7 +242,7 @@ const Header = () => {
                   <div
                     key={index}
                     onClick={() => searchFromHistory(term)}
-                    className="flex items-center px-4 py-2.5 hover:bg-gray-700 transition-colors cursor-pointer"
+                    className="flex items-center px-4 py-2.5 hover:bg-gray-700/50 transition-colors cursor-pointer"
                   >
                     <FaClock className="text-gray-400 mr-3" size={14} />
                     <span className="text-white">{term}</span>
@@ -230,19 +252,18 @@ const Header = () => {
             </div>
           )}
 
-          {/* Popular Suggestions */}
-          {value.length === 0 && (
+          {value.length === 0 && popularAnime.length > 0 && (
             <div className="border-b border-gray-700">
               <div className="flex items-center gap-2 p-3 text-gray-300">
                 <FaFire className="text-primary" />
                 <span className="font-medium">Popular Right Now</span>
               </div>
               <div className="grid grid-cols-2 pb-2">
-                {['Jujutsu Kaisen', 'One Piece', 'Attack on Titan', 'Demon Slayer'].map((term, index) => (
+                {popularAnime.map((term, index) => (
                   <div
                     key={index}
                     onClick={() => searchFromHistory(term)}
-                    className="px-4 py-2.5 hover:bg-gray-700 transition-colors cursor-pointer text-sm text-gray-300 truncate"
+                    className="px-4 py-2.5 hover:bg-gray-700/50 transition-colors cursor-pointer text-sm text-gray-300 truncate"
                   >
                     {term}
                   </div>
@@ -251,7 +272,6 @@ const Header = () => {
             </div>
           )}
 
-          {/* Search Results */}
           {value.length > 2 ? (
             <>
               {isLoading ? (
@@ -269,7 +289,7 @@ const Header = () => {
                       <div
                         key={item.id}
                         onClick={() => navigateToAnimePage(item.id)}
-                        className="flex p-3 hover:bg-gray-700 transition-colors cursor-pointer"
+                        className="flex p-3 hover:bg-gray-700/50 transition-colors cursor-pointer"
                       >
                         <div className="flex-shrink-0 w-16 h-20 relative">
                           <img
@@ -298,7 +318,7 @@ const Header = () => {
                   </div>
                   <button
                     onClick={handleSubmit}
-                    className="w-full py-3 bg-primary hover:bg-primary-dark text-black font-bold flex items-center justify-center gap-2"
+                    className="w-full py-3 bg-primary hover:bg-primary-dark text-black font-bold flex items-center justify-center gap-2 transition-colors"
                   >
                     View All Results
                     <FaArrowCircleRight />
