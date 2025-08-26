@@ -114,7 +114,7 @@ const ContinueWatching = () => {
             >
               <button
                 aria-label="remove"
-                className="absolute top-2 right-4 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
+                className="absolute top-3 right-6 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
@@ -197,9 +197,11 @@ const ContinueWatching = () => {
                 >
                   {formatAnimeName(item?.animeName || item?.animeId)}
                 </h3>
-                <p className="text-xs font-semibold text-white mt-1">
-                  Episode: {item?.episodeNumber ?? "-"}
+
+                <p className="text-sm font-semibold text-white mt-1">
+                  Episode: {item?.episodeNumber ?? "-"} (ID: {item?.episodeId ?? "-"})
                 </p>
+
                 <p className="text-xs text-gray-300 mt-1">
                   Last watched:{" "}
                   {item?.lastWatched ? new Date(item.lastWatched).toLocaleString() : "-"}
