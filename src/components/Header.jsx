@@ -31,7 +31,7 @@ const Header = () => {
         const response = await fetch('/api/animes/most-popular?page=1');
         const data = await response.json();
         if (data && data.data && data.data.response) {
-          setPopularAnime(data.data.response.slice(0, 20).map(anime => anime.title));
+          setPopularAnime(data.data.response.slice(0, 10).map(anime => anime.title));
         }
       } catch (error) {
         console.error("Failed to fetch popular anime:", error);
