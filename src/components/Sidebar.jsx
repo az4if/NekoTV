@@ -18,6 +18,7 @@ const Sidebar = () => {
 
   const list = [
     { name: "Home", link: "/home", icon: <FaHome /> },
+    { name: "A-Z List", link: "/animes/az-list/a", icon: <FaList /> },
     { name: "Subbed Anime", link: "/animes/subbed-anime", icon: <FaStar /> },
     { name: "Dubbed Anime", link: "/animes/dubbed-anime", icon: <FaStar /> },
     { name: "Most Popular", link: "/animes/most-popular", icon: <FaFire /> },
@@ -27,7 +28,6 @@ const Sidebar = () => {
     { name: "Recently Added", link: "/animes/recently-added", icon: <FaClock /> },
     { name: "Recently Updated", link: "/animes/recently-updated", icon: <FaClock /> },
     { name: "Top Upcoming", link: "/animes/top-upcoming", icon: <FaArrowUp /> },
-    { name: "A-Z List", link: "/animes/az-list/a", icon: <FaList /> },
     { name: "Movies", link: "/animes/movie", icon: <FaFilm /> },
     { name: "OVAs", link: "/animes/ova", icon: <FaFilm /> },
     { name: "ONAs", link: "/animes/ona", icon: <FaFilm /> },
