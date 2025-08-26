@@ -94,7 +94,7 @@ const ListPage = () => {
     <div className="list-page pt-14">
       <Helmet>
         <title>{displayTitle}</title>
-        <meta property="og:title" content="explore - NekoTV" />
+        <meta property="og:title" content="explore - AniMix" />
       </Helmet>
 
       {category === "az-list" && (
@@ -113,8 +113,8 @@ const ListPage = () => {
             endMessage={<Footer />}
           >
             <Heading
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center mt-6 mb-6 font-bold ml-0"
-              style={{ color: "var(--secondary)" }}
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center mt-2 mb-3 font-bold ml-0"
+              style={{ color: "var(--primary)" }}
             >
               {displayTitle}
             </Heading>
