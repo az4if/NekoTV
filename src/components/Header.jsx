@@ -101,7 +101,7 @@ const Header = () => {
     const updatedHistory = [
       searchTerm,
       ...searchHistory.filter(item => item !== searchTerm)
-    ].slice(0, 7);
+    ].slice(0, 5);
     
     setSearchHistory(updatedHistory);
   }, [searchHistory]);
