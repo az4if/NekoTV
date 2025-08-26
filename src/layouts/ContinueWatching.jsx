@@ -192,7 +192,7 @@ const ContinueWatching = () => {
 
               <div className="w-full mt-2 text-center">
                 <h3
-                  className="title text-sm font-semibold text-center truncate w-full transition-colors duration-300 text-white hover:text-[var(--primary)]"
+                  className="title text-base font-semibold text-center truncate w-full transition-colors duration-300 text-white hover:text-[var(--primary)]"
                   title={item?.animeName || item?.animeId}
                 >
                   {formatAnimeName(item?.animeName || item?.animeId)}
@@ -216,4 +216,5 @@ const ContinueWatching = () => {
 };
 
 export default ContinueWatching;
+
 
