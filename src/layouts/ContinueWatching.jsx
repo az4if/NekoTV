@@ -67,7 +67,7 @@ const ContinueWatching = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, []); 
 
   const handleClick = (animeId, epId) => {
     if (!animeId || !epId) return;
@@ -103,13 +103,13 @@ const ContinueWatching = () => {
             >
               <button
                 aria-label="remove"
-                className="absolute top-1 right-1 text-white font-extrabold text-lg z-10"
+                className="absolute top-2 right-2 bg-red-500 rounded-md w-8 h-8 flex items-center justify-center z-10 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
                 }}
               >
-                ✕
+                <span className="text-black font-extrabold text-lg">✕</span>
               </button>
 
               <div
@@ -120,7 +120,7 @@ const ContinueWatching = () => {
                   if (e.key === "Enter") handleClick(item?.animeId, item?.episodeId);
                 }}
               >
-                <div className="w-full h-36 md:h-40 overflow-hidden rounded-md mb-2 bg-gray-200">
+                <div className="w-full h-48 md:h-56 overflow-hidden rounded-md mb-2 bg-gray-200">
                   <img
                     src={thumb}
                     alt={`${formatAnimeName(item?.animeName || item?.animeId)} poster`}
