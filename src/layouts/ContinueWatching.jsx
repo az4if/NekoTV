@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// Uncomment and adjust if you want the component to attempt fetching missing thumbnails
-// import { API_BASE_URL } from "../services/useApi";
+import { API_BASE_URL } from "../services/useApi";
 
 const formatAnimeName = (name) => {
   if (!name) return "Unknown";
@@ -27,6 +26,49 @@ const ContinueWatching = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("continueWatching")) || [];
+    const animeIdsToFetch = [
+      ...new Set(stored.filter((i) => !i?.poster).map((i) => i.animeId)),
+    ];
+
+    if (animeIdsToFetch.length === 0) return;
+
+    let mounted = true;
+
+    (async () => {
+      const updated = [...stored];
+
+      for (const animeId of animeIdsToFetch) {
+        try {
+          const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
+          const image =
+            res?.data?.data?.poster || res?.data?.data?.image || res?.data?.poster || res?.data?.image || null;
+
+          if (image) {
+            for (let i = 0; i < updated.length; i++) {
+              if (updated[i].animeId === animeId && !updated[i].poster) {
+                updated[i] = { ...updated[i], poster: image };
+              }
+            }
+          }
+        } catch (err) {
+          console.warn(`Failed to fetch poster for animeId=${animeId}:`, err?.message || err);
+        }
+      }
+
+      if (mounted) {
+        const sliced = updated.slice(0, 60);
+        setContinueList(sliced);
+        localStorage.setItem("continueWatching", JSON.stringify(sliced));
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const handleClick = (animeId, epId) => {
     if (!animeId || !epId) return;
     navigate(`/watch/${animeId}?ep=${epId}`);
@@ -38,53 +80,6 @@ const ContinueWatching = () => {
     setContinueList(updated);
     localStorage.setItem("continueWatching", JSON.stringify(updated));
   };
-
-  // OPTIONAL: backfill missing thumbnails by calling your API
-  // This is commented out by default to avoid unexpected network calls.
-  /*
-  useEffect(() => {
-    let mounted = true;
-    const needsFetch = continueList.some((i) => !i.thumbnail);
-    if (!needsFetch) return;
-
-    (async () => {
-      const updated = await Promise.all(
-        continueList.map(async (item) => {
-          if (item.thumbnail) return item;
-          try {
-            const res = await axios.get(`${API_BASE_URL}/anime/${item.animeId}`);
-            const image =
-              res?.data?.data?.image || res?.data?.data?.poster || res?.data?.image || null;
-            return {
-              ...item,
-              thumbnail:
-                image ||
-                `https://via.placeholder.com/320x180?text=${encodeURIComponent(
-                  formatAnimeName(item.animeName || item.animeId)
-                )}`,
-            };
-          } catch (err) {
-            return {
-              ...item,
-              thumbnail: `https://via.placeholder.com/320x180?text=${encodeURIComponent(
-                formatAnimeName(item.animeName || item.animeId)
-              )}`,
-            };
-          }
-        })
-      );
-
-      if (mounted) {
-        setContinueList(updated);
-        localStorage.setItem("continueWatching", JSON.stringify(updated));
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [continueList]);
-  */
 
   if (!Array.isArray(continueList) || continueList.length === 0) return null;
 
