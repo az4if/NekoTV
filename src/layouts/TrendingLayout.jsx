@@ -86,7 +86,7 @@ const TrendingLayout = ({ data }) => {
                 <Link
                   to={`/anime/${item.id}`}
                   title={item.title}
-                  className="title text-sm font-semibold text-center truncate w-full mt-1 transition-colors duration-300 hover:text-[var(--primary)]"
+                  className="title text-base font-semibold text-center truncate w-full mt-1 transition-colors duration-300 hover:text-[var(--primary)]"
                 >
                   {item.title}
                 </Link>
