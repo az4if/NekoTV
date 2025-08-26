@@ -61,13 +61,29 @@ const WatchPage = () => {
         episodes.find((e) => e.id.split("ep=").pop() === ep) || episodes[0];
       if (!currentEpObj) return;
 
+      const animeNameFromId = capitalizeWords(
+        id.replace(/-\d+$/, "").replace(/-/g, " ")
+      );
+
       const newEntry = {
         animeId: id,
-        animeName: capitalizeWords(id.replace(/-\d+$/, "")),
+        animeName: animeNameFromId,
         episodeNumber: currentEpObj.episodeNumber,
         episodeId: currentEpObj.id.split("ep=").pop(),
         episodesCount: episodes.length,
         lastWatched: new Date().toISOString(),
+        thumbnail:
+          currentEpObj?.thumbnail ||
+          currentEpObj?.image ||
+          currentEpObj?.poster ||
+          currentEpObj?.animeImage ||
+          episodes[0]?.thumbnail ||
+          episodes[0]?.image ||
+          episodes[0]?.poster ||
+          episodes[0]?.animeImage ||
+          `https://via.placeholder.com/320x180?text=${encodeURIComponent(
+            animeNameFromId
+          )}`,
       };
 
       const filtered = stored.filter((a) => a.animeId !== id);
