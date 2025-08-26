@@ -110,16 +110,15 @@ const ContinueWatching = () => {
           return (
             <div
               key={`${item?.animeId}-${item?.episodeId}-${index}`}
-              className="item flex flex-col items-center overflow-hidden px-1 md:px-2"
+              className="item flex flex-col items-center overflow-hidden px-1 md:px-2 relative"
             >
               <button
                 aria-label="remove"
-                className="absolute top-2 right-2 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-30 shadow-md"
+                className="absolute top-2 right-2 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
                 }}
-                style={{ position: "absolute" }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +169,7 @@ const ContinueWatching = () => {
                   aria-hidden="true"
                 />
 
-                <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
                   <img
                     src={playIcon}
                     alt="play icon"
@@ -193,7 +192,7 @@ const ContinueWatching = () => {
 
               <div className="w-full mt-2 text-center">
                 <h3
-                  className="title text-sm font-semibold text-center truncate w-full transition-colors duration-300 text-white"
+                  className="title text-sm font-semibold text-center truncate w-full transition-colors duration-300 text-white hover:text-[var(--primary)]"
                   title={item?.animeName || item?.animeId}
                 >
                   {formatAnimeName(item?.animeName || item?.animeId)}
