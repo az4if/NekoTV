@@ -17,15 +17,12 @@ const formatAnimeName = (name) => {
 const ContinueWatching = () => {
   const [continueList, setContinueList] = useState([]);
   const navigate = useNavigate();
-
-  // track in-flight poster fetches to avoid duplicate requests
-  const inProgressRef = useRef(new Set());
+  const triedFetchRef = useRef(new Set());
   const isMountedRef = useRef(true);
 
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem("continueWatching")) || [];
-      // keep stored data (metadata) but poster will be refreshed from API
       setContinueList(stored.slice(0, 60));
     } catch (err) {
       console.error("Failed to parse continueWatching from localStorage:", err);
@@ -37,13 +34,11 @@ const ContinueWatching = () => {
     };
   }, []);
 
-  // Primary behavior: try API for poster first for every animeId present in storage.
-  // If API returns an image we use it and persist it. If API fails or returns no image,
-  // we *fall back* to whatever was already in localStorage (if any). We do NOT do
-  // repeated poster fetches from the image onError handler — API-first, storage-second.
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("continueWatching")) || [];
-    const animeIdsToFetch = [...new Set(stored.map((i) => i.animeId))].slice(0, 60);
+    const animeIdsToFetch = [
+      ...new Set(stored.filter((i) => !i?.poster).map((i) => i.animeId)),
+    ];
 
     if (animeIdsToFetch.length === 0) return;
 
@@ -53,8 +48,8 @@ const ContinueWatching = () => {
       const updated = [...stored];
 
       for (const animeId of animeIdsToFetch) {
-        if (!animeId || inProgressRef.current.has(animeId)) continue;
-        inProgressRef.current.add(animeId);
+        if (!animeId || triedFetchRef.current.has(animeId)) continue;
+        triedFetchRef.current.add(animeId);
 
         try {
           const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
@@ -66,33 +61,21 @@ const ContinueWatching = () => {
             null;
 
           if (image) {
-            // set poster for every entry that matches animeId
             for (let i = 0; i < updated.length; i++) {
-              if (updated[i].animeId === animeId) {
-                // Only set poster — preserve other stored metadata
+              if (updated[i].animeId === animeId && !updated[i].poster) {
                 updated[i] = { ...updated[i], poster: image };
               }
             }
-          } else {
-            // If API returned no image, we intentionally *do not* clear stored poster;
-            // keep whatever is in localStorage (storage-second behavior).
           }
         } catch (err) {
-          // API failed for this animeId — keep storage poster if present
           console.warn(`Failed to fetch poster for animeId=${animeId}:`, err?.message || err);
-        } finally {
-          inProgressRef.current.delete(animeId);
         }
       }
 
       if (mounted && isMountedRef.current) {
         const sliced = updated.slice(0, 60);
         setContinueList(sliced);
-        try {
-          localStorage.setItem("continueWatching", JSON.stringify(sliced));
-        } catch (e) {
-          // ignore localStorage write failures
-        }
+        localStorage.setItem("continueWatching", JSON.stringify(sliced));
       }
     })();
 
@@ -101,30 +84,49 @@ const ContinueWatching = () => {
     };
   }, []);
 
+  const fetchPosterForAnime = async (animeId) => {
+    if (!animeId || triedFetchRef.current.has(animeId)) return null;
+    triedFetchRef.current.add(animeId);
+
+    try {
+      const res = await axios.get(`${API_BASE_URL}/anime/${animeId}`);
+      const image =
+        res?.data?.data?.poster ||
+        res?.data?.data?.image ||
+        res?.data?.poster ||
+        res?.data?.image ||
+        null;
+
+      if (image) {
+        setContinueList((prev) => {
+          const updated = prev.map((it) => (it.animeId === animeId && !it.poster ? { ...it, poster: image } : it));
+          try {
+            localStorage.setItem("continueWatching", JSON.stringify(updated));
+          } catch (e) {
+          }
+          return updated;
+        });
+        return image;
+      }
+    } catch (err) {
+      console.warn(`fetchPosterForAnime failed for ${animeId}:`, err?.message || err);
+    }
+
+    return null;
+  };
+
   const handleClick = (animeId, epId) => {
     if (!animeId || !epId) return;
     navigate(`/watch/${animeId}?ep=${epId}`);
   };
 
-  // Remove the single entry and also remove any cached poster for the same animeId
-  // so that future additions won't reuse the cached poster.
   const handleRemove = (index) => {
     const updated = [...continueList];
-    const removed = updated.splice(index, 1);
-    const removedAnimeId = removed?.[0]?.animeId;
-
-    // If there are remaining entries with the same animeId, clear their poster too
-    const cleaned = updated.map((it) => (it.animeId === removedAnimeId ? { ...it, poster: undefined } : it));
-
-    setContinueList(cleaned);
-    try {
-      localStorage.setItem("continueWatching", JSON.stringify(cleaned));
-    } catch (e) {
-      // ignore
-    }
+    updated.splice(index, 1);
+    setContinueList(updated);
+    localStorage.setItem("continueWatching", JSON.stringify(updated));
   };
 
-  // quick guard: if empty or invalid
   if (!Array.isArray(continueList) || continueList.length === 0) return null;
 
   return (
@@ -133,7 +135,6 @@ const ContinueWatching = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
         {continueList.map((item, index) => {
-          // thumb priority: poster (from API if available, else storage) -> thumbnail -> placeholder
           const thumb =
             item?.poster ||
             item?.thumbnail ||
@@ -215,12 +216,15 @@ const ContinueWatching = () => {
                   loading="lazy"
                   src={thumb}
                   alt={item?.animeName || item?.animeId}
-                  onError={(e) => {
-                    // Per API-first requirement: do NOT attempt another API call here.
-                    // If the image fails to load, fall back to the placeholder only.
-                    e.currentTarget.src = `https://via.placeholder.com/320x180?text=${encodeURIComponent(
-                      formatAnimeName(item?.animeName || item?.animeId)
-                    )}`;
+                  onError={async (e) => {
+                    const newImage = await fetchPosterForAnime(item?.animeId);
+                    if (newImage) {
+                      e.currentTarget.src = newImage;
+                    } else {
+                      e.currentTarget.src = `https://via.placeholder.com/320x180?text=${encodeURIComponent(
+                        formatAnimeName(item?.animeName || item?.animeId)
+                      )}`;
+                    }
                   }}
                 />
               </div>
@@ -243,7 +247,7 @@ const ContinueWatching = () => {
                 </p>
 
                 <p className="text-xs text-gray-300 mt-1">
-                  Last watched: {" "}
+                  Last watched:{" "}
                   {item?.lastWatched ? new Date(item.lastWatched).toLocaleString() : "-"}
                 </p>
               </div>
