@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from "../services/useApi";
 
+import playIcon from "../assets/play.svg";
+
 const formatAnimeName = (name) => {
   if (!name) return "Unknown";
   return name
@@ -106,17 +108,18 @@ const ContinueWatching = () => {
             )}`;
 
           return (
-            <article
+            <div
               key={`${item?.animeId}-${item?.episodeId}-${index}`}
-              className="bg-[#145183] rounded-lg p-2 relative cursor-pointer hover:opacity-90"
+              className="item flex flex-col items-center overflow-hidden px-1 md:px-2"
             >
               <button
                 aria-label="remove"
-                className="absolute top-2 right-2 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-10 shadow-md"
+                className="absolute top-2 right-2 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-30 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
                 }}
+                style={{ position: "absolute" }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -148,40 +151,62 @@ const ContinueWatching = () => {
               </button>
 
               <div
-                onClick={() => handleClick(item?.animeId, item?.episodeId)}
                 role="button"
                 tabIndex={0}
+                onClick={() => handleClick(item?.animeId, item?.episodeId)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter")
                     handleClick(item?.animeId, item?.episodeId);
                 }}
+                className="poster group w-full h-0 pb-[150%] bg-lightbg relative overflow-hidden rounded-md"
               >
-                <div className="w-full h-56 md:h-72 overflow-hidden rounded-md mb-2 bg-gray-200">
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
+                  style={{
+                    background:
+                      "linear-gradient(to bottom, rgba(31,79,112,0.6), rgba(76,52,140,0.5), rgba(0,0,0,0.7))",
+                    backdropFilter: "blur(4px)",
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <img
-                    src={thumb}
-                    alt={`${formatAnimeName(item?.animeName || item?.animeId)} poster`}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = `https://via.placeholder.com/320x180?text=${encodeURIComponent(
-                        formatAnimeName(item?.animeName || item?.animeId)
-                      )}`;
-                    }}
+                    src={playIcon}
+                    alt="play icon"
+                    className="w-10 h-10 md:w-12 md:h-12 drop-shadow-lg"
                   />
                 </div>
 
-                <h3 className="text-base text-white font-semibold truncate">
+                <img
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                  src={thumb}
+                  alt={item?.animeName || item?.animeId}
+                  onError={(e) => {
+                    e.currentTarget.src = `https://via.placeholder.com/320x180?text=${encodeURIComponent(
+                      formatAnimeName(item?.animeName || item?.animeId)
+                    )}`;
+                  }}
+                />
+              </div>
+
+              <div className="w-full mt-2 text-center">
+                <h3
+                  className="title text-sm font-semibold text-center truncate w-full transition-colors duration-300 text-white"
+                  title={item?.animeName || item?.animeId}
+                >
                   {formatAnimeName(item?.animeName || item?.animeId)}
                 </h3>
-                <p className="text-sm text-gray-200 mt-1">
-                  Episode: {item?.episodeNumber ?? "-"} (ID: {item?.episodeId ?? "-"})
+                <p className="text-xs text-gray-300 mt-1">
+                  Episode: {item?.episodeNumber ?? "-"}
                 </p>
                 <p className="text-xs text-gray-300 mt-1">
                   Last watched:{" "}
                   {item?.lastWatched ? new Date(item.lastWatched).toLocaleString() : "-"}
                 </p>
               </div>
-            </article>
+            </div>
           );
         })}
       </div>
@@ -190,7 +215,3 @@ const ContinueWatching = () => {
 };
 
 export default ContinueWatching;
-
-
-
-
