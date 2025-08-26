@@ -94,9 +94,7 @@ const ContinueWatching = () => {
 
   return (
     <div className="my-5">
-      <h2 className="text-xl font-bold text-[var(--primary)] mb-3">
-        Continue Watching
-      </h2>
+      <h2 className="text-xl font-bold text-[var(--primary)] mb-3">Continue Watching</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
         {continueList.map((item, index) => {
@@ -154,8 +152,7 @@ const ContinueWatching = () => {
                 tabIndex={0}
                 onClick={() => handleClick(item?.animeId, item?.episodeId)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter")
-                    handleClick(item?.animeId, item?.episodeId);
+                  if (e.key === "Enter") handleClick(item?.animeId, item?.episodeId);
                 }}
                 className="poster group w-full h-0 pb-[150%] bg-lightbg relative overflow-hidden rounded-md"
               >
@@ -191,12 +188,17 @@ const ContinueWatching = () => {
               </div>
 
               <div className="w-full mt-2 text-center">
-                <h3
-                  className="title text-base font-semibold text-center truncate w-full transition-colors duration-300 text-white hover:text-[var(--primary)]"
+                <button
+                  onClick={() => handleClick(item?.animeId, item?.episodeId)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleClick(item?.animeId, item?.episodeId);
+                  }}
+                  className="title text-base font-semibold text-center truncate w-full transition-colors duration-300 text-white hover:text-[var(--primary)] cursor-pointer"
                   title={item?.animeName || item?.animeId}
+                  aria-label={`Watch ${formatAnimeName(item?.animeName || item?.animeId)}`}
                 >
                   {formatAnimeName(item?.animeName || item?.animeId)}
-                </h3>
+                </button>
 
                 <p className="text-sm font-semibold text-white mt-1">
                   Episode: {item?.episodeNumber ?? "-"} (ID: {item?.episodeId ?? "-"})
@@ -216,5 +218,3 @@ const ContinueWatching = () => {
 };
 
 export default ContinueWatching;
-
-
