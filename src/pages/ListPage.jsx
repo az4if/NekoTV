@@ -97,7 +97,11 @@ const ListPage = () => {
         <meta property="og:title" content="explore - NekoTV" />
       </Helmet>
 
-      {category === "az-list" && <AZ selected={query} />}
+      {category === "az-list" && (
+        <div className="mt-10 mb-6">
+          <AZ selected={query} />
+        </div>
+      )}
 
       <div className="xl:mx-10 sm:mx-2">
         {pages && !isLoading ? (
