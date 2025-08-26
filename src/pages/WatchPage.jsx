@@ -129,7 +129,7 @@ const WatchPage = () => {
         </Helmet>
 
         <div className="flex flex-col gap-2">
-          <div className="path flex mb-2 mx-2 items-center gap-2 text-base ">
+          <div className="path flex mt-6 md:mt-8 mb-2 mx-2 items-center gap-2 text-base">
             <Link to="/home">
               <h4 className="hover:text-primary">Home</h4>
             </Link>
