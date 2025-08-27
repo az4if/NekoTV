@@ -2,16 +2,24 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaGithub, FaTelegram } from "react-icons/fa6";
 import AZ from "../layouts/AZ";
+import Logo from "../components/Logo";
 
 const Footer = () => {
   return (
     <footer className="w-full mt-8 py-8 px-4 bg-black/30 backdrop-blur-md border-t border-neutral-700/50">
       <div className="max-w-6xl mx-auto">
+        
+        {/* Centered Logo */}
+        <div className="flex justify-center mb-6">
+          <Logo compact={true} showBadge={true} inlineEar={true} to="/home" />
+        </div>
+
+        {/* A-Z Section */}
         <div className="mb-8">
           <div className="flex flex-col items-center mb-4">
-            <p className="text-[#89bcf8] font-bold text-lg">A-Z List</p>
+            <p className="text-[#89bcf8] font-bold text-lg">Browse Alphabetically</p>
             <p className="text-neutral-400 text-sm text-center mt-1">
-              Searching anime order by alphabet name A to Z.
+              Quickly search anime by alphabetical order.
             </p>
           </div>
           <AZ selected={null} />
@@ -19,13 +27,16 @@ const Footer = () => {
         
         <div className="h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-6"></div>
         
+        {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col items-center md:items-start gap-2">
             <p className="text-sm text-neutral-300 text-center md:text-left">
               NekoTV does not store any files on its servers, it only links
               to the media hosted on third-party services.
             </p>
-            <p className="text-neutral-400 text-sm">© NekoTV All rights reserved.</p>
+            <p className="text-neutral-400 text-sm">
+              © NekoTV All rights reserved.
+            </p>
           </div>
           
           <div className="flex flex-col items-center md:items-end gap-4">
