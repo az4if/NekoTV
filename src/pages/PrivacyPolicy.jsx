@@ -60,10 +60,6 @@ const PrivacyPolicy = () => {
                 </a>.
               </p>
             </section>
-            
-            <div className="mt-8 pt-4 border-t border-neutral-700">
-              <p className="text-neutral-400 text-sm">Last updated: August 16, 2025</p>
-            </div>
           </div>
         </div>
       </div>
