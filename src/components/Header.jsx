@@ -190,7 +190,12 @@ const Header = () => {
               placeholder="Search anime..."
               type="text"
               aria-label="Search anime"
-              className="w-full bg-gray-800 text-white py-2.5 pl-4 pr-12 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full text-white py-2.5 pl-4 pr-12 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+              style={{
+                background: 'rgba(17, 24, 39, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
             />
             <div className="absolute right-3 flex gap-2">
               {value.length > 0 && (
