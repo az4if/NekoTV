@@ -31,9 +31,9 @@ const SearchResult = () => {
       </Helmet>
 
       <div className="xl:mx-10 sm:mx-2">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center mt-2 mb-3 font-bold ml-0">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center mt-2 mb-3 font-bold ml-0" style={{ color: 'var(--primary)' }}>
           Search Results for "
-          <span style={{ color: "#89bcf8" }}>{keyword}</span>"
+          <span style={{ color: '#89bcf8' }}>{keyword}</span>"
         </h1>
 
         {isLoading ? (
