@@ -100,6 +100,7 @@ const Header = () => {
     debouncedValue.length > 2 ? `/suggestion?keyword=${debouncedValue}` : null
   );
 
+  // Use functional update to avoid stale closures
   const addToSearchHistory = useCallback((searchTerm) => {
     setSearchHistory((prev) => {
       const updated = [searchTerm, ...prev.filter((item) => item !== searchTerm)].slice(0, 5);
@@ -213,8 +214,9 @@ const Header = () => {
           </div>
         </form>
 
+        {/* Rounded dropdown container */}
         <div
-          className={`mt-4 mx-4 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ${
+          className={`mt-1 mx-4 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ${
             showSearchBar ? "block" : "hidden"
           }`}
           style={{
@@ -223,6 +225,7 @@ const Header = () => {
             border: "1px solid rgba(255, 255, 255, 0.08)",
           }}
         >
+          {/* Recent searches */}
           {value.length === 0 && searchHistory.length > 0 && (
             <div className="border-b border-gray-700">
               <div className="flex justify-between items-center p-3">
@@ -250,6 +253,7 @@ const Header = () => {
             </div>
           )}
 
+          {/* Popular right now */}
           {value.length === 0 && popularAnime.length > 0 && (
             <div className="border-b border-gray-700">
               <div className="flex items-center gap-2 p-3 text-gray-300">
@@ -270,6 +274,7 @@ const Header = () => {
             </div>
           )}
 
+          {/* Suggestions / results */}
           {value.length > 2 ? (
             <>
               {isLoading ? (
