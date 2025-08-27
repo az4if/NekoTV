@@ -2,9 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const AZ = ({ selected }) => {
-  console.log(selected);
+  // Normalize selected:
+  // - undefined  -> "ALL"  (used by ListPage when query is undefined)
+  // - null       -> null   (explicitly means "no selection" e.g. Footer)
+  // - "other"    -> "#"    (route uses "other" but display is "#")
+  // - otherwise  -> uppercased string to match item.title
+  let normalized;
+  if (selected === undefined) {
+    normalized = "ALL";
+  } else if (selected === null) {
+    normalized = null;
+  } else if (typeof selected === "string") {
+    if (selected.toLowerCase() === "other") normalized = "#";
+    else normalized = selected.toUpperCase();
+  } else {
+    normalized = selected;
+  }
 
-  selected = selected === null ? "All" : selected;
   const azList = [
     { title: "ALL", link: "/animes/az-list" },
     { title: "#", link: "/animes/az-list/other" },
@@ -36,17 +50,15 @@ const AZ = ({ selected }) => {
     { title: "Y", link: "/animes/az-list/Y" },
     { title: "Z", link: "/animes/az-list/Z" },
   ];
+
   return (
     <div className="list w-full mb-2 px-2 flex gap-2 flex-wrap justify-center items-center">
       {azList.map((item) => (
         <Link to={item.link} key={item.title}>
           <button
             className={`px-2 py-1 bg-lightbg text-[14px] hover:bg-primary hover:text-black rounded-sm font-bold mb-1 ${
-              selected && selected.toUpperCase() === item.title
-                ? "bg-primary text-black"
-                : ""
+              normalized && normalized === item.title ? "bg-primary text-black" : ""
             }`}
-            key={item.title}
           >
             {item.title}
           </button>
