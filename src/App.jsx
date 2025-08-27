@@ -13,10 +13,10 @@ import PageNotFound from "./pages/PageNotFound";
 import PeopleInfoPage from "./pages/PeopleInfoPage";
 import CharacterInfoPage from "./pages/CharacterInfoPage";
 import CharactersPage from "./pages/CharactersPage";
-import About from "./pages/About";
-import TermsOfService from "./pages/TermsOfService";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import DMCA from "./pages/DMCA";
+import About from "./pages/About.jsx";
+import TermsOfService from "./pages/TermsOfService.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import DMCA from "./pages/DMCA.jsx";
 
 const App = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
