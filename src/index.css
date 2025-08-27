@@ -55,10 +55,10 @@ input:focus {
     90deg,
     #fff,
     var(--primary)
-  ); /* Gradient colors */
-  -webkit-background-clip: text; /* Clips the gradient to the text */
+  ); 
+  -webkit-background-clip: text; 
   background-clip: text;
-  -webkit-text-fill-color: transparent; /* Makes the text transparent */
+  -webkit-text-fill-color: transparent; 
   text-align: center;
 }
 .active {
@@ -158,26 +158,21 @@ input:focus {
   
 @import "./variables.css";
 
-/* ---------------------- global/root ---------------------- */
 :root {
-  /* global fonts / system */
   font-family: "Nunito", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
   color: #fff;
 
-  /* your design tokens */
-  --background: #071025; /* fallback if variables.css doesn't set it */
+  --background: #071025; 
   background-color: var(--background);
 
-  /* logo theme variables (change these to theme the logo) */
   --logo-primary: #7dd3fc;
   --logo-accent: #a78bfa;
   --logo-ink: #0b1020;
 }
 
-/* reset / global */
 * {
   font-family: "Nunito", sans-serif;
   line-height: 1.5;
@@ -187,7 +182,6 @@ input:focus {
   padding: 0;
 }
 
-/* ---------------------- general app styles (kept from your original) ---------------------- */
 .active {
   position: fixed;
   width: 100%;
@@ -196,9 +190,6 @@ input:focus {
   inset: 0;
 }
 
-/* ... (keep the rest of your original CSS blocks unchanged) ... */
-
-/* small utility/input/button */
 input {
   outline: none;
   border: none;
@@ -214,14 +205,12 @@ input:focus {
   border-radius: 0 15px 15px 0;
 }
 
-/* other selectors (kept as provided) */
 .flw-item {
   width: calc(16.66% - 0.5rem);
   margin: 0.7rem 0;
   position: relative;
 }
 
-/* gradient-text left as-is in case you use it */
 .gradient-text {
   font-weight: 800;
   background: linear-gradient(90deg, #fff, var(--primary));
@@ -230,13 +219,6 @@ input:focus {
   -webkit-text-fill-color: transparent;
   text-align: center;
 }
-
-/* cover / sidebar / responsiveness etc - keep your previous rules:
-   .bg-active, .sidebar, .cover-wrapper, .cover, @media ... etc
-   (omitted here for brevity — keep them in your file)
-*/
-
-/* ---------------------- logo styles (merged & fixed) ---------------------- */
 
 .logo-wrapper {
   display: inline-flex;
@@ -269,7 +251,7 @@ input:focus {
   align-items: center;
   gap: 0.08rem;
   margin: 0;
-  position: relative; /* necessary for ::after */
+  position: relative; 
 }
 
 .logo-char {
@@ -346,11 +328,46 @@ input:focus {
 @media (max-width: 480px) {
   .logo-char { font-size: 1rem; }
 }
-/* disables the shining sweep without removing other CSS */
 .logo-text::after {
   display: none !important;
   animation: none !important;
 }
 
-/* ---------------------- end logo styles ---------------------- */
+footer {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
 
+.az-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.az-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.az-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #89bcf8;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.az-letter:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #a29bfc;
+  transform: translateY(-2px);
+}
