@@ -14,8 +14,8 @@ const pageStyles = `
 .mini-btn{border:1px solid rgba(255,255,255,0.06); padding:0.5rem 0.75rem; border-radius:8px; font-size:0.875rem}
 `;
 
-export default function About(){
-  if (typeof document !== 'undefined') document.title = 'About - NekoTV';
+function About() {
+  if (typeof document !== "undefined") document.title = "About - NekoTV";
 
   return (
     <main className="container mx-auto px-4 legal-wrapper">
@@ -65,4 +65,4 @@ export default function About(){
   );
 }
 
-
+export default About;
