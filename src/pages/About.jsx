@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function About() {
+function About() {
   if (typeof document !== "undefined") document.title = "About - NekoTV";
 
   return (
@@ -9,3 +9,5 @@ export default function About() {
     </main>
   );
 }
+
+export default About;
