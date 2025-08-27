@@ -2,30 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaGithub, FaTelegram } from "react-icons/fa6";
 import AZ from "../layouts/AZ";
-import Logo from "./Logo";
 
 const Footer = () => {
   return (
     <footer className="w-full mt-8 py-8 px-4 bg-black/30 backdrop-blur-md border-t border-neutral-700/50">
       <div className="max-w-6xl mx-auto">
-        {/* Logo center top */}
-        <div className="flex justify-center mb-6">
-          <Logo to="/home" compact={false} showBadge={true} inlineEar={true} />
-        </div>
-
-        {/* A-Z Section */}
         <div className="mb-8">
           <div className="flex flex-col items-center mb-4">
-            <p className="text-[#89bcf8] font-bold text-lg">Browse Alphabetically</p>
+            <p className="text-[#89bcf8] font-bold text-lg">A-Z List</p>
             <p className="text-neutral-400 text-sm text-center mt-1">
-              Quickly search anime by alphabetical order.
+              Searching anime order by alphabet name A to Z.
             </p>
           </div>
           <AZ selected={null} />
         </div>
-
+        
         <div className="h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-6"></div>
-
+        
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col items-center md:items-start gap-2">
             <p className="text-sm text-neutral-300 text-center md:text-left">
@@ -34,7 +27,7 @@ const Footer = () => {
             </p>
             <p className="text-neutral-400 text-sm">© NekoTV All rights reserved.</p>
           </div>
-
+          
           <div className="flex flex-col items-center md:items-end gap-4">
             <div className="flex flex-wrap justify-center gap-4 md:gap-6">
               <Link 
@@ -62,7 +55,7 @@ const Footer = () => {
                 About
               </Link>
             </div>
-
+            
             <div className="flex gap-4">
               <a
                 href="https://github.com/jsmat0m"
