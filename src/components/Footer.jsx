@@ -15,10 +15,10 @@ const Footer = () => {
         <div className="mb-8">
           <div className="flex flex-col items-center mb-4">
             <h2 id="alpha-list-heading" className="text-[#89bcf8] font-bold text-lg">
-              A-Z List
+              A → Z List
             </h2>
             <p id="alpha-list-desc" className="text-neutral-400 text-sm text-center mt-1">
-              Searching anime order by alphabet name A to Z.
+              Quick alphabetical browsing.
             </p>
           </div>
 
