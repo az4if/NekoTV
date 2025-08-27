@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 const pages = [
-  { name: "Home", to: "/" },
+  { name: "Home", to: "/home" },
   { name: "About", to: "/about" },
   { name: "Privacy Policy", to: "/privacy-policy" },
   { name: "Terms of Service", to: "/terms-of-service" },
