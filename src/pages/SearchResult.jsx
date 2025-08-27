@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { useInfiniteApi } from "../services/useApi";
 import PageNotFound from "./PageNotFound";
 import Loader from "../components/Loader";
-import Heading from "../components/Heading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "../components/Image";
 import Footer from "../components/Footer";
@@ -31,9 +30,11 @@ const SearchResult = () => {
         <meta property="og:title" content={`Search - ${keyword} - NekoTV`} />
       </Helmet>
 
-      {/* side padding wrapper (same as Home) */}
       <div className="xl:mx-10 sm:mx-2">
-        <Heading>Search Results for "{keyword}"</Heading>
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center mt-2 mb-3 font-bold ml-0">
+          Search Results for "
+          <span style={{ color: "#89bcf8" }}>{keyword}</span>"
+        </h1>
 
         {isLoading ? (
           <Loader className="h-[100dvh]" />
