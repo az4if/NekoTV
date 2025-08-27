@@ -6,8 +6,8 @@ import Logo from "./Logo";
 
 const Footer = () => {
   return (
-    <footer className="w-full mt-8 py-8 px-4">
-      <div className="max-w-6xl mx-auto bg-black/30 backdrop-blur-2xl backdrop-saturate-150 rounded-2xl shadow-xl border border-neutral-700/50 p-8">
+    <footer className="w-full mt-8 py-8 px-4 bg-black/30 backdrop-blur-2xl backdrop-saturate-150 border-t border-neutral-700/50 rounded-t-3xl shadow-lg">
+      <div className="max-w-6xl mx-auto">
         <div className="flex justify-center mb-6">
           <Logo to="/" compact={false} showBadge={true} inlineEar={true} />
         </div>
@@ -22,7 +22,7 @@ const Footer = () => {
           <AZ selected={null} aria-labelledby="alpha-list-heading" />
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-6" />
+        <div className="h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-6"></div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col items-center md:items-start gap-2">
@@ -50,22 +50,10 @@ const Footer = () => {
             </div>
 
             <div className="flex gap-4">
-              <a
-                href="https://github.com/jsmat0m"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-white text-xl transition-colors"
-                aria-label="GitHub"
-              >
+              <a href="https://github.com/jsmat0m" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white text-xl transition-colors" aria-label="GitHub">
                 <FaGithub />
               </a>
-              <a
-                href="https://t.me/jsmat0m"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-blue-300 text-xl transition-colors"
-                aria-label="Telegram"
-              >
+              <a href="https://t.me/jsmat0m" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-blue-300 text-xl transition-colors" aria-label="Telegram">
                 <FaTelegram />
               </a>
             </div>
