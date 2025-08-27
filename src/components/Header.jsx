@@ -214,7 +214,7 @@ const Header = () => {
           </div>
         </form>
         <div
-          className={`mt-1 mx-4 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
+          className={`mt-1 mx-4 rounded-2x1 shadow-lg overflow-hidden transition-all duration-300 ${
             showSearchBar ? "block" : "hidden"
           }`}
           style={{
