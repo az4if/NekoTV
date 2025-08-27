@@ -63,10 +63,6 @@ const TermsOfService = () => {
                 We may terminate or suspend access to our service immediately, without prior notice, for any breach of these Terms. Upon termination, users must cease all use of the service.
               </p>
             </section>
-            
-            <div className="mt-8 pt-4 border-t border-neutral-700">
-              <p className="text-neutral-400 text-sm">Last updated: August 16, 2025</p>
-            </div>
           </div>
         </div>
       </div>
