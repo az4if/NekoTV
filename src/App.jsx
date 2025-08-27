@@ -13,6 +13,10 @@ import PageNotFound from "./pages/PageNotFound";
 import PeopleInfoPage from "./pages/PeopleInfoPage";
 import CharacterInfoPage from "./pages/CharacterInfoPage";
 import CharactersPage from "./pages/CharactersPage";
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import DMCA from './pages/DMCA';
+import About from './pages/About';
 
 const App = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
@@ -42,6 +46,10 @@ const App = () => {
           <Route path="/people/:id" element={<PeopleInfoPage />} />
           <Route path="/character/:id" element={<CharacterInfoPage />} />
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/dmca" element={<DMCA />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </main>
     </>
