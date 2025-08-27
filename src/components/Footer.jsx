@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="w-full mt-8 py-8 px-4 bg-black/30 backdrop-blur-2xl backdrop-saturate-150 border-t border-neutral-700/50 rounded-t-3xl shadow-lg">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-center mb-6">
-          <Logo to="/" compact={false} showBadge={true} inlineEar={true} />
+          <Logo to="/home" compact={false} showBadge={true} inlineEar={true} />
         </div>
 
         <div className="mb-8">
