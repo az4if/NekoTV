@@ -15,11 +15,8 @@ const Footer = () => {
         <div className="mb-8">
           <div className="flex flex-col items-center mb-4">
             <h2 id="alpha-list-heading" className="text-[#89bcf8] font-bold text-lg">
-              A → Z List
+              A → Z Quick alphabetical browsing.
             </h2>
-            <p id="alpha-list-desc" className="text-neutral-400 text-sm text-center mt-1">
-              Quick alphabetical browsing.
-            </p>
           </div>
 
           <AZ selected={null} aria-labelledby="alpha-list-heading" />
