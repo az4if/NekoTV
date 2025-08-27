@@ -19,23 +19,29 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedHistory = localStorage.getItem('animeSearchHistory');
+    const savedHistory = localStorage.getItem("animeSearchHistory");
     if (savedHistory) {
-      setSearchHistory(JSON.parse(savedHistory));
+      try {
+        setSearchHistory(JSON.parse(savedHistory));
+      } catch (err) {
+        console.error("Failed to parse search history:", err);
+      }
     }
   }, []);
 
   useEffect(() => {
     const fetchPopularAnime = async () => {
       try {
-        const response = await fetch('/api/animes/most-popular?page=1');
+        const response = await fetch("/api/animes/most-popular?page=1");
         const data = await response.json();
         if (data && data.data && data.data.response) {
-          setPopularAnime(data.data.response.slice(0, 10).map(anime => anime.title));
+          setPopularAnime(data.data.response.slice(0, 10).map((anime) => anime.title));
+        } else {
+          setPopularAnime(["Jujutsu Kaisen", "One Piece", "Attack on Titan", "Demon Slayer"]);
         }
       } catch (error) {
         console.error("Failed to fetch popular anime:", error);
-        setPopularAnime(['Jujutsu Kaisen', 'One Piece', 'Attack on Titan', 'Demon Slayer']);
+        setPopularAnime(["Jujutsu Kaisen", "One Piece", "Attack on Titan", "Demon Slayer"]);
       }
     };
 
@@ -45,7 +51,7 @@ const Header = () => {
   }, [showSearchBar]);
 
   useEffect(() => {
-    localStorage.setItem('animeSearchHistory', JSON.stringify(searchHistory));
+    localStorage.setItem("animeSearchHistory", JSON.stringify(searchHistory));
   }, [searchHistory]);
 
   useEffect(() => {
@@ -56,10 +62,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current.contains(e.target)
-      ) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
         resetSearch();
       }
     };
@@ -70,7 +73,7 @@ const Header = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showSearchBar]);
+  }, [showSearchBar, resetSearch]);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -81,7 +84,7 @@ const Header = () => {
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [showSearchBar]);
+  }, [showSearchBar, resetSearch]);
 
   const changeInput = (e) => {
     const newValue = e.target.value;
@@ -98,24 +101,22 @@ const Header = () => {
   );
 
   const addToSearchHistory = useCallback((searchTerm) => {
-    const updatedHistory = [
-      searchTerm,
-      ...searchHistory.filter(item => item !== searchTerm)
-    ].slice(0, 5);
-    
-    setSearchHistory(updatedHistory);
-  }, [searchHistory]);
+    setSearchHistory((prev) => {
+      const updated = [searchTerm, ...prev.filter((item) => item !== searchTerm)].slice(0, 5);
+      return updated;
+    });
+  }, []);
 
   const handleSubmit = useCallback(
     (e) => {
-      e.preventDefault();
+      if (e) e.preventDefault();
       if (value.trim()) {
         addToSearchHistory(value.trim());
-        navigate(`/search?keyword=${value.trim()}`);
+        navigate(`/search?keyword=${encodeURIComponent(value.trim())}`);
         resetSearch();
       }
     },
-    [value, navigate, addToSearchHistory]
+    [value, navigate, addToSearchHistory, resetSearch]
   );
 
   const navigateToAnimePage = useCallback(
@@ -123,15 +124,18 @@ const Header = () => {
       navigate(`/anime/${id}`);
       resetSearch();
     },
-    [navigate]
+    [navigate, resetSearch]
   );
 
-  const searchFromHistory = useCallback((term) => {
-    setValue(term);
-    addToSearchHistory(term);
-    navigate(`/search?keyword=${term}`);
-    resetSearch();
-  }, [navigate, addToSearchHistory]);
+  const searchFromHistory = useCallback(
+    (term) => {
+      setValue(term);
+      addToSearchHistory(term);
+      navigate(`/search?keyword=${encodeURIComponent(term)}`);
+      resetSearch();
+    },
+    [addToSearchHistory, navigate, resetSearch]
+  );
 
   const resetSearch = useCallback(() => {
     setValue("");
@@ -169,18 +173,17 @@ const Header = () => {
           <div className="right flex gap-3 md:gap-5 items-center">
             <button
               aria-label={showSearchBar ? "Close search" : "Open search"}
-              onClick={() => setShowSearchBar(!showSearchBar)}
+              onClick={() => setShowSearchBar((s) => !s)}
               className="p-1.5 hover:text-primary transition-colors"
             >
               {showSearchBar ? <FaTimes size={22} /> : <FaSearch size={20} />}
             </button>
           </div>
         </div>
+
         <form
           onSubmit={handleSubmit}
-          className={`mt-2 px-4 transition-all duration-300 ${
-            showSearchBar ? "flex" : "hidden"
-          }`}
+          className={`mt-2 px-4 transition-all duration-300 ${showSearchBar ? "flex" : "hidden"}`}
         >
           <div className="relative flex items-center w-full">
             <input
@@ -203,24 +206,21 @@ const Header = () => {
                   <FaTimes size={18} />
                 </button>
               )}
-              <button
-                type="submit"
-                aria-label="Submit search"
-                className="text-primary hover:text-primary-light p-1"
-              >
+              <button type="submit" aria-label="Submit search" className="text-primary hover:text-primary-light p-1">
                 <FaSearch size={18} />
               </button>
             </div>
           </div>
         </form>
+
         <div
-          className={`mt-1 mx-4 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
+          className={`mt-4 mx-4 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 ${
             showSearchBar ? "block" : "hidden"
           }`}
           style={{
-            background: 'rgba(17, 24, 39, 0.8)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
+            background: "rgba(17, 24, 39, 0.85)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
           }}
         >
           {value.length === 0 && searchHistory.length > 0 && (
@@ -230,22 +230,20 @@ const Header = () => {
                   <FaHistory className="text-primary" />
                   <span className="font-medium">Recent Searches</span>
                 </div>
-                <button 
-                  onClick={clearSearchHistory}
-                  className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded"
-                >
+                <button onClick={clearSearchHistory} className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded">
                   Clear All
                 </button>
               </div>
-              <div className="pb-2">
+
+              <div className="pb-3 px-2">
                 {searchHistory.map((term, index) => (
                   <div
                     key={index}
                     onClick={() => searchFromHistory(term)}
-                    className="flex items-center px-4 py-2.5 hover:bg-gray-700/50 transition-colors cursor-pointer"
+                    className="flex items-center px-3 py-2.5 hover:bg-gray-700/40 transition-colors cursor-pointer rounded-lg mb-2"
                   >
                     <FaClock className="text-gray-400 mr-3" size={14} />
-                    <span className="text-white">{term}</span>
+                    <span className="text-white truncate">{term}</span>
                   </div>
                 ))}
               </div>
@@ -258,12 +256,12 @@ const Header = () => {
                 <FaFire className="text-primary" />
                 <span className="font-medium">Popular Right Now</span>
               </div>
-              <div className="grid grid-cols-2 pb-2">
+              <div className="grid grid-cols-2 gap-2 pb-3 px-2">
                 {popularAnime.map((term, index) => (
                   <div
                     key={index}
                     onClick={() => searchFromHistory(term)}
-                    className="px-4 py-2.5 hover:bg-gray-700/50 transition-colors cursor-pointer text-sm text-gray-300 truncate"
+                    className="px-3 py-2 hover:bg-gray-700/40 transition-colors cursor-pointer text-sm text-gray-300 truncate rounded-xl"
                   >
                     {term}
                   </div>
@@ -279,32 +277,22 @@ const Header = () => {
                   <Loader size="small" />
                 </div>
               ) : isError ? (
-                <div className="py-4 text-center text-red-300">
-                  Failed to load suggestions
-                </div>
+                <div className="py-4 text-center text-red-300">Failed to load suggestions</div>
               ) : data && data.data.length > 0 ? (
                 <>
-                  <div className="max-h-[60vh] overflow-y-auto">
+                  <div className="max-h-[60vh] overflow-y-auto p-2">
                     {data.data.map((item) => (
                       <div
                         key={item.id}
                         onClick={() => navigateToAnimePage(item.id)}
-                        className="flex p-3 hover:bg-gray-700/50 transition-colors cursor-pointer"
+                        className="flex p-3 hover:bg-gray-700/40 transition-colors cursor-pointer rounded-lg mb-2"
                       >
-                        <div className="flex-shrink-0 w-16 h-20 relative">
-                          <img
-                            src={item.poster}
-                            alt={item.title}
-                            className="w-full h-full object-cover rounded"
-                          />
+                        <div className="flex-shrink-0 w-16 h-20 relative rounded-md overflow-hidden">
+                          <img src={item.poster} alt={item.title} className="w-full h-full object-cover" />
                         </div>
                         <div className="ml-3 flex-1 min-w-0">
-                          <h4 className="font-medium text-white truncate">
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-gray-300 truncate">
-                            {item.alternativeTitle}
-                          </p>
+                          <h4 className="font-medium text-white truncate">{item.title}</h4>
+                          <p className="text-sm text-gray-300 truncate">{item.alternativeTitle}</p>
                           <div className="flex items-center mt-1 text-xs text-gray-400">
                             <span>{item.aired}</span>
                             <span className="mx-2">•</span>
@@ -316,9 +304,10 @@ const Header = () => {
                       </div>
                     ))}
                   </div>
+
                   <button
                     onClick={handleSubmit}
-                    className="w-full py-3 bg-primary hover:bg-primary-dark text-black font-bold flex items-center justify-center gap-2 transition-colors"
+                    className="w-full py-3 bg-primary hover:bg-primary-dark text-black font-bold flex items-center justify-center gap-2 transition-colors rounded-b-2xl"
                   >
                     View All Results
                     <FaArrowCircleRight />
@@ -326,16 +315,12 @@ const Header = () => {
                 </>
               ) : (
                 debouncedValue.length > 2 && (
-                  <div className="py-6 text-center text-gray-400">
-                    No results found for "{debouncedValue}"
-                  </div>
+                  <div className="py-6 text-center text-gray-400">No results found for "{debouncedValue}"</div>
                 )
               )}
             </>
           ) : value.length > 0 && (
-            <div className="py-4 px-4 text-center text-gray-400">
-              Continue typing to see results...
-            </div>
+            <div className="py-4 px-4 text-center text-gray-400">Continue typing to see results...</div>
           )}
         </div>
       </div>
