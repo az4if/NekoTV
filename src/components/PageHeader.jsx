@@ -18,7 +18,7 @@ const PageHeader = ({ title }) => {
         <div className="h-6" />
 
         <nav
-          className="inline-flex items-center flex-wrap justify-center gap-8 text-3xl md:text-4xl font-extrabold tracking-tight"
+          className="inline-flex items-center flex-wrap justify-center gap-8 text-2xl md:text-3xl font-bold tracking-tight"
           role="navigation"
           aria-label="Main site navigation"
         >
