@@ -9,37 +9,65 @@ const DMCA = () => {
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-neutral-900/50 rounded-lg p-6">
           <div className="prose prose-invert max-w-none">
+            
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">DMCA Takedown Request Requirements</h2>
+              <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">
+                DMCA Takedown Notice
+              </h2>
               <p className="text-neutral-300">
-                We take the intellectual property rights of others seriously and require that our Users do the same. The Digital Millennium Copyright Act (DMCA) established a process for addressing claims of copyright infringement. If you own a copyright or have authority to act on behalf of a copyright owner and want to report a claim that a third party is infringing that material on or through GitLab's services, please submit a DMCA report on our Contact page, and we will take appropriate action.
+                We respect the intellectual property rights of creators and expect our users to do the same. 
+                Under the Digital Millennium Copyright Act (DMCA), copyright 
+                holders or their authorized representatives may request the removal of infringing material. 
+                If you believe that your copyrighted work has been used on our website without authorization, 
+                you may file a DMCA takedown request, and we will take appropriate action.
               </p>
             </section>
             
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">DMCA Report Requirements</h2>
+              <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">
+                What to Include in a DMCA Report
+              </h2>
               <ul className="text-neutral-300 list-disc pl-5 space-y-3">
-                <li>A description of the copyrighted work that you claim is being infringed;</li>
-                <li>A description of the material you claim is infringing and that you want removed or access to which you want disabled and the URL or other location of that material;</li>
-                <li>Your name, title (if acting as an agent), address, telephone number, and email address;</li>
-                <li>The following statement: "I have a good faith belief that the use of the copyrighted material I am complaining of is not authorized by the copyright owner, its agent, or the law (e.g., as a fair use)";</li>
-                <li>The following statement: "The information in this notice is accurate and, under penalty of perjury, I am the owner, or authorized to act on behalf of the owner, of the copyright or of an exclusive right that is allegedly infringed";</li>
-                <li>An electronic or physical signature of the owner of the copyright or a person authorized to act on the owner's behalf.</li>
+                <li>A clear description of the copyrighted work you believe is being infringed.</li>
+                <li>A description of the infringing material, including the URL or exact location where it appears on our site.</li>
+                <li>Your full name, title (if acting on behalf of the copyright owner), mailing address, phone number, and email address.</li>
+                <li>
+                  The following statement: 
+                  <br />
+                  <em>
+                    "I have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law."
+                  </em>
+                </li>
+                <li>
+                  The following statement: 
+                  <br />
+                  <em>
+                    "The information in this notice is accurate, and under penalty of perjury, I am the copyright owner or am authorized to act on behalf of the owner of an exclusive right that is allegedly infringed."
+                  </em>
+                </li>
+                <li>An electronic or physical signature of the copyright owner or an authorized representative.</li>
               </ul>
             </section>
             
             <section>
-              <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">Submission Process</h2>
+              <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">
+                How to Submit Your Request
+              </h2>
               <p className="text-neutral-300 mb-4">
-                Your DMCA take down request should be submitted here:{" "}
-                <a href="https://hianime.to/contact" className="text-[#89bcf8] hover:underline" target="_blank" rel="noopener noreferrer">
-                  https://hianime.to/contact
+                Please send your complete DMCA takedown notice via email to:{" "}
+                <a
+                  href="mailto:nekotv-anime@proton.me"
+                  className="text-[#89bcf8] hover:underline"
+                >
+                  nekotv-anime@proton.me
                 </a>
               </p>
               <p className="text-neutral-300">
-                We will then review your DMCA request and take proper actions, including removal of the content from the website.
+                Once received, we will review your request and take the necessary steps, 
+                which may include removing or disabling access to the infringing content.
               </p>
             </section>
+
           </div>
         </div>
       </div>
