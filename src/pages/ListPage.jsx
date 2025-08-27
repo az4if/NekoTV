@@ -32,7 +32,7 @@ const ListPage = () => {
     "producer",
   ];
 
-  const { category, query = null } = useParams();
+  const { category, query } = useParams();
   const isValidQuery = validateQueries.includes(category);
 
   if (!isValidQuery) {
