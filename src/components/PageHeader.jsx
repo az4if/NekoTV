@@ -1,16 +1,5 @@
-// src/components/PageHeader.jsx
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-
-/**
- * PageHeader
- * - Large centered title
- * - Big centered navigation showing the full list:
- *   Home / About / Privacy Policy / Terms of Service / DMCA
- * - Active item is highlighted; accessible navigation role/aria
- *
- * Replace your existing PageHeader with this file.
- */
 
 const pages = [
   { name: "Home", to: "/" },
@@ -23,7 +12,7 @@ const pages = [
 const PageHeader = ({ title }) => {
   const location = useLocation();
 
-  // Get a fallback title from the path if none provided
+  // Fallback title derived from path if `title` prop isn't provided
   const pathFallback = (() => {
     const pathname = location.pathname === "/" ? "/home" : location.pathname;
     const last = pathname.split("/").filter(Boolean).pop() || "Page";
@@ -72,11 +61,6 @@ const PageHeader = ({ title }) => {
             );
           })}
         </nav>
-
-        {/* Optional small subtitle / breadcrumb hint */}
-        <p className="mt-4 text-sm text-neutral-400">
-          {`You are here: ${location.pathname === "/" ? "Home" : decodeURIComponent(location.pathname).replace(/\//g, " / ")}`}
-        </p>
       </div>
     </header>
   );
