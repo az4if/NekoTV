@@ -13,10 +13,6 @@ import PageNotFound from "./pages/PageNotFound";
 import PeopleInfoPage from "./pages/PeopleInfoPage";
 import CharacterInfoPage from "./pages/CharacterInfoPage";
 import CharactersPage from "./pages/CharactersPage";
-import About from "./pages/About.jsx";
-import TermsOfService from "./pages/TermsOfService.jsx";
-import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
-import DMCA from "./pages/DMCA.jsx";
 
 const App = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
@@ -45,11 +41,6 @@ const App = () => {
           <Route path="/characters/:id" element={<CharactersPage />} />
           <Route path="/people/:id" element={<PeopleInfoPage />} />
           <Route path="/character/:id" element={<CharacterInfoPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/dmca" element={<DMCA />} />
-
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
@@ -57,4 +48,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;
