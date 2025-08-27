@@ -35,10 +35,10 @@ const PageHeader = ({ title }) => {
                   to={p.to}
                   end={p.to === "/"}
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-md transition-all duration-150 transform-gpu focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a29bfc] ${
+                    `px-4 py-2 rounded-md transition-all duration-150 transform-gpu focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a29bfc] font-extrabold ${
                       isActive
-                        ? "text-[#a29bfc] font-black scale-105"
-                        : "text-[#89bcf8] hover:text-[#a29bfc] opacity-95 font-extrabold"
+                        ? "text-[#a29bfc] scale-110"
+                        : "text-[#89bcf8] hover:text-[#a29bfc] opacity-95"
                     }`
                   }
                 >
