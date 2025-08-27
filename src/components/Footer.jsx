@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaGithub, FaTelegram } from "react-icons/fa6";
-import AZ from "../layouts/AZ"; // Make sure this path is correct
+import AZ from "../layouts/AZ";
 
 const Footer = () => {
   return (
@@ -14,7 +14,7 @@ const Footer = () => {
               Searching anime order by alphabet name A to Z.
             </p>
           </div>
-          <AZ />
+          <AZ selected={null} />
         </div>
         
         <div className="h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-6"></div>
