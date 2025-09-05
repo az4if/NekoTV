@@ -1,22 +1,23 @@
 import React from "react";
 import pageNotFound from "../assets/404.png";
 import { Link } from "react-router-dom";
-import { FaAngleLeft } from "react-icons/fa";
+import { FaAngleLeft, FaAlignJustify, FaHome, FaFilm, FaList, FaTv, FaFire, FaArrowUp } from "react-icons/fa";
+
 import { Helmet } from "react-helmet";
 
 const PageNotFound = () => {
   const navLinks = [
-    { name: "Home", id: "/home" },
-    { name: "Movies", id: "/animes/movie" },
-    { name: "TV Shows", id: "/animes/tv" },
-    { name: "Most Popular", id: "/animes/most-popular" },
-    { name: "Top Airing", id: "/animes/top-airing" },
+    { name: "A-Z List", link: "/animes/az-list", icon: <FaList /> },
+    { name: "Movies", link: "/animes/movie", icon: <FaFilm /> },
+    { name: "TV Shows", link: "/animes/tv", icon: <FaTv /> },
+    { name: "Most Popular", link: "/animes/most-popular", icon: <FaFire /> },
+    { name: "Top Airing", link: "/animes/top-airing", icon: <FaArrowUp /> },
   ];
 
   return (
     <div className="min-h-[100dvh] flex flex-col justify-between items-center text-white px-4" style={{ background: "transparent" }}>
       <Helmet>
-        <title>404 PAGE NOT FOUND</title>
+        <title>404 Page Not Found</title>
         <meta property="og:title" content="PAGE NOT FOUND - Yanime" />
       </Helmet>
 
