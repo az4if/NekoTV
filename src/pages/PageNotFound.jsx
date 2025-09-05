@@ -18,7 +18,7 @@ const PageNotFound = () => {
     <div className="min-h-[100dvh] flex flex-col justify-between items-center text-white px-4" style={{ background: "transparent" }}>
       <Helmet>
         <title>404 Page Not Found</title>
-        <meta property="og:title" content="PAGE NOT FOUND - Yanime" />
+        <meta property="og:title" content="Page Not Found - NekoTV" />
       </Helmet>
 
       <div className="flex flex-col items-center justify-center mt-12 gap-6 text-center">
