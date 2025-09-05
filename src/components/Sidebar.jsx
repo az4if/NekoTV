@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import Genres from "./Genres";
 
 import { useEffect } from "react";
-import { FaAngleLeft, FaHome, FaStar, FaFilm, FaClock, FaList, FaFire, FaArrowUp, FaHeart } from "react-icons/fa";
+import { FaAngleLeft, FaHome, FaStar, FaFilm, FaClock, FaList, FaTv, FaFire, FaArrowUp, FaHeart } from "react-icons/fa";
 
 const Sidebar = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
@@ -22,6 +22,7 @@ const Sidebar = () => {
     { name: "Subbed Anime", link: "/animes/subbed-anime", icon: <FaStar /> },
     { name: "Dubbed Anime", link: "/animes/dubbed-anime", icon: <FaStar /> },
     { name: "Most Popular", link: "/animes/most-popular", icon: <FaFire /> },
+    { name: "TV Shows", link: "/animes/tv", icon: <FaTv /> },
     { name: "Top Airing", link: "/animes/top-airing", icon: <FaArrowUp /> },
     { name: "Most Favorite", link: "/animes/most-favorite", icon: <FaHeart /> },
     { name: "Latest Completed", link: "/animes/completed", icon: <FaClock /> },
