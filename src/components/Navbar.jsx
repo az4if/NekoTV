@@ -17,7 +17,6 @@ const Navbar = () => {
   return (
     <nav className="w-full py-4 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Desktop Navigation */}
         <div className="hidden md:flex justify-center gap-4">
           {navLinks.map((item) => (
             <Link
@@ -35,7 +34,6 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Mobile Navigation - Multi-line layout */}
         <div className="md:hidden">
           <div className="flex flex-wrap justify-center gap-2">
             {navLinks.map((item) => (
