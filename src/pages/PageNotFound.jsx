@@ -1,17 +1,41 @@
 import React from "react";
 import pageNotFound from "../assets/404.png";
 import { Link } from "react-router-dom";
-import { FaAngleLeft, FaAlignJustify, FaHome, FaFilm, FaList, FaTv, FaFire, FaArrowUp } from "react-icons/fa";
-
+import { FaAngleLeft, FaHome, FaFilm, FaList, FaTv, FaFire, FaArrowUp } from "react-icons/fa";
 import { Helmet } from "react-helmet";
 
 const PageNotFound = () => {
   const navLinks = [
-    { name: "A-Z List", link: "/animes/az-list", icon: <FaList /> },
-    { name: "Movies", link: "/animes/movie", icon: <FaFilm /> },
-    { name: "TV Shows", link: "/animes/tv", icon: <FaTv /> },
-    { name: "Most Popular", link: "/animes/most-popular", icon: <FaFire /> },
-    { name: "Top Airing", link: "/animes/top-airing", icon: <FaArrowUp /> },
+    { 
+      id: 1, 
+      name: "A-Z List", 
+      link: "/animes/az-list", 
+      icon: <FaList /> 
+    },
+    { 
+      id: 2,
+      name: "Movies", 
+      link: "/animes/movie", 
+      icon: <FaFilm /> 
+    },
+    { 
+      id: 3,
+      name: "TV Shows", 
+      link: "/animes/tv", 
+      icon: <FaTv /> 
+    },
+    { 
+      id: 4,
+      name: "Most Popular", 
+      link: "/animes/most-popular", 
+      icon: <FaFire /> 
+    },
+    { 
+      id: 5,
+      name: "Top Airing", 
+      link: "/animes/top-airing", 
+      icon: <FaArrowUp /> 
+    },
   ];
 
   return (
@@ -29,7 +53,7 @@ const PageNotFound = () => {
         />
         <h1 className="text-3xl md:text-4xl text-primary font-bold">404 ERROR</h1>
         <h2 className="text-lg md:text-xl text-white/80 mb-4">
-          Oops! We Can&apos;t Find This Page.
+          Oops! We Can't Find This Page.
         </h2>
         <Link to="/home">
           <button className="bg-primary hover:scale-105 transition-transform flex items-center gap-2 text-black px-6 py-3 rounded-2xl shadow-lg">
@@ -45,9 +69,10 @@ const PageNotFound = () => {
           {navLinks.map((item) => (
             <Link
               key={item.id}
-              to={item.id}
-              className="bg-black/50 hover:bg-primary hover:text-black text-white px-4 py-2 rounded-xl transition-colors font-semibold"
+              to={item.link} 
+              className="bg-black/50 hover:bg-primary hover:text-black text-white px-4 py-2 rounded-xl transition-colors font-semibold flex items-center gap-2"
             >
+              {item.icon}
               {item.name}
             </Link>
           ))}
