@@ -139,7 +139,7 @@
 #slider .opacity-layer img {
   position: absolute;
   left: 0;
-  top: 0%;
+  top: 20%;
   width: 100%;
   height: 90%;
   object-fit: cover;
