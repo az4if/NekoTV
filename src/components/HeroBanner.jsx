@@ -23,7 +23,7 @@ const HeroBanner = ({ slides }) => {
   const swiperRef = useRef(null);
 
   return (
-    <div className="mt-8"> {/* Added gap above container */}
+    <div className="mt-8">
       <Swiper
         speed={250}
         grabCursor={true}
@@ -34,7 +34,7 @@ const HeroBanner = ({ slides }) => {
         pagination={{ clickable: true }}
         navigation={false}
         onSwiper={(s) => (swiperRef.current = s)}
-        className="slider h-[50vh] mb-5 sm:h-[50vh] md:h-[60vh] xl:h-[calc(100vh-250px)]" // Increased height values
+        className="slider h-[50vh] mb-5 sm:h-[50vh] md:h-[60vh] xl:h-[calc(100vh-250px)]"
       >
         {slides &&
           slides.map((item) => (
