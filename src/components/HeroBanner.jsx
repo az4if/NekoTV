@@ -33,7 +33,7 @@ const HeroBanner = ({ slides }) => {
       pagination={{ clickable: true }}
       navigation={false}
       onSwiper={(s) => (swiperRef.current = s)}
-      className="slider h-[40vh] pt-10 mb-5 sm:h-[40vh] md:h-[50vh] xl:h-[calc(100vh-300px)]"
+      className="slider h-[55vh] mb-5 sm:h-[55vh] md:h-[65vh] xl:h-[calc(100vh-220px)]"
     >
       {slides &&
         slides.map((item) => (
@@ -44,12 +44,13 @@ const HeroBanner = ({ slides }) => {
             <div className="content w-full h-full">
               <div className="opacity-layer absolute left-0 md:left-[15%] xl:left-[30%] top-0 right-0 bottom-0 overflow-hidden">
                 <img
-                  className="h-full w-full object-cover object-center"
+                  className="absolute left-0 top-[10%] w-full h-[90%] object-cover object-center"
                   loading="lazy"
                   alt={item.title}
                   src={item.poster}
                 />
               </div>
+
               <div className="nevi-icons" aria-hidden={false}>
                 <button
                   className="nevi-btn nevi-prev"
