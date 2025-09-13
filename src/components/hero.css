@@ -267,15 +267,12 @@
   pointer-events: auto;
 }
 
-.slider {
-  margin-top: 2rem; 
+/* Alternate (absolute top-right) option, uncomment to use this variant instead:
+.trending > .flex { position: relative; }
+.trending .nevi-icons {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  margin-left: 0;
 }
-
-.opacity-layer {
-  height: 100%;
-}
-
-.opacity-layer img {
-  min-height: 100%;
-  object-fit: cover;
-}
+*/
