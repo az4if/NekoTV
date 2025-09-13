@@ -55,7 +55,10 @@ const Home = () => {
         <Loader className="h-[100dvh]" />
       ) : (
         <>
-          <HeroBanner slides={data?.data?.spotlight} />
+          {/* Added margin-top to create gap above HeroBanner */}
+          <div className="mt-6 md:mt-8 lg:mt-10">
+            <HeroBanner slides={data?.data?.spotlight} />
+          </div>
 
           <div className="xl:mx-10">
             <ContinueWatching />
