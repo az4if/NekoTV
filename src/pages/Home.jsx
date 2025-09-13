@@ -55,7 +55,9 @@ const Home = () => {
         <Loader className="h-[100dvh]" />
       ) : (
         <>
-          <HeroBanner slides={data?.data?.spotlight} />
+          <div className="mt-4">
+            <HeroBanner slides={data?.data?.spotlight} />
+          </div>
 
           <div className="xl:mx-10">
             <ContinueWatching />
