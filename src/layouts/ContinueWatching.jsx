@@ -196,7 +196,7 @@ const ContinueWatching = () => {
     <div className="my-5">
       <h2 className="text-xl font-bold text-[var(--primary)] mb-3">Continue Watching</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
         {continueList.map((item, index) => {
           const thumb =
             item?.poster ||
@@ -212,7 +212,7 @@ const ContinueWatching = () => {
             >
               <button
                 aria-label="remove"
-                className="absolute top-3 right-5 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
+                className="absolute top-2 right-3 sm:right-5 bg-[#89bcf8] rounded-md w-9 h-9 flex items-center justify-center z-40 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemove(index);
@@ -323,4 +323,3 @@ const ContinueWatching = () => {
 };
 
 export default ContinueWatching;
-
