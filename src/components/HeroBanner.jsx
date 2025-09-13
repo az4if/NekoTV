@@ -44,7 +44,7 @@ const HeroBanner = ({ slides }) => {
             <div className="content w-full h-full">
               <div className="opacity-layer absolute left-0 md:left-[15%] xl:left-[30%] top-0 right-0 bottom-0 overflow-hidden">
                 <img
-                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  className="absolute left-0 top-[10%] w-full h-full object-cover object-center"
                   loading="lazy"
                   alt={item.title}
                   src={item.poster}
