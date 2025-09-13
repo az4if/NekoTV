@@ -124,6 +124,17 @@
   -webkit-mask-repeat: no-repeat, no-repeat;
 }
 
+.opacity-layer img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  top: 0;
+  left: 0;
+}
+
 .synopsis {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -293,5 +304,14 @@
     text-overflow: ellipsis;
     display: inline-block;
     vertical-align: middle;
+  }
+}
+
+@media (orientation: landscape) and (max-width: 900px) {
+  .opacity-layer {
+    left: 0 !important;
+  }
+  .z-10.ml-2.md\:ml-12.min-w-32.md\:max-w-2xl.absolute.bottom-0.sm\:bottom-\[30px\] {
+    bottom: 8px;
   }
 }
