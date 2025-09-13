@@ -78,27 +78,30 @@ const HeroBanner = ({ slides }) => {
                 >
                   {item.title}
                 </div>
-                <div className="text-base text-white mb-3 gap-5 hidden md:flex">
-                  <div className="item">
+
+                <div className="text-base text-white mb-3 gap-3 flex flex-wrap md:flex-nowrap items-center">
+                  <div className="item text-sm">
                     <FaCirclePlay />
-                    <span>{item.type}</span>
+                    <span className="ml-1">{item.type}</span>
                   </div>
-                  <div className="item">
+                  <div className="item text-sm">
                     <FaClock />
-                    <span>{item.duration}</span>
+                    <span className="ml-1">{item.duration}</span>
                   </div>
-                  <div className="item">
+                  <div className="item text-sm">
                     <FaCalendarDay />
-                    <span>{item.aired}</span>
+                    <span className="ml-1">{item.aired}</span>
                   </div>
                   <div className="item bg-primary text-black text-sm font-bold px-2 rounded-sm">
                     <span className="">{item.quality}</span>
                   </div>
-                  <div className="item">
+                  <div className="item text-sm">
                     <SoundsInfo episodes={item.episodes} />
                   </div>
                 </div>
+
                 <div className="synopsis">{item.synopsis}</div>
+
                 <div className="desi-buttons z-50 text-sm md:text-base mt-5 flex gap-2">
                   <Link
                     to={`/watch/${item.id}`}
