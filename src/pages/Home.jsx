@@ -55,8 +55,9 @@ const Home = () => {
         <Loader className="h-[100dvh]" />
       ) : (
         <>
-          {/* Added margin-top to create gap above HeroBanner */}
-          <div className="mt-6 md:mt-8 lg:mt-10">
+          {/* Add negative margin to create space without affecting layout */}
+          <div className="relative -mt-4">
+            <div className="absolute inset-x-0 top-0 h-4 bg-black"></div>
             <HeroBanner slides={data?.data?.spotlight} />
           </div>
 
