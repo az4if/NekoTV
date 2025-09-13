@@ -55,11 +55,7 @@ const Home = () => {
         <Loader className="h-[100dvh]" />
       ) : (
         <>
-          {/* Add negative margin to create space without affecting layout */}
-          <div className="relative -mt-4">
-            <div className="absolute inset-x-0 top-0 h-4 bg-black"></div>
-            <HeroBanner slides={data?.data?.spotlight} />
-          </div>
+          <HeroBanner slides={data?.data?.spotlight} />
 
           <div className="xl:mx-10">
             <ContinueWatching />
