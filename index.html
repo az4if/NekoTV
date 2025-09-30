@@ -29,12 +29,10 @@
     <meta property="og:image:height" content="350" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      href="/src/assets/favicon1.png"
-      type="image/x-icon"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#1f4f70" />
+
+    <link rel="shortcut icon" href="/src/assets/favicon1.png" type="image/x-icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,23 +42,29 @@
     />
 
     <style>
-      /* Reset margin */
+      :root{
+        --logo-primary: #7dd3fc;
+        --logo-accent:  #a78bfa; 
+        --bg-primary:  #1f4f70; 
+        --bg-accent:   #4c348c; 
+        --vh: 1vh;
+      }
+
       html, body {
         margin: 0;
         padding: 0;
         height: 100%;
         font-family: 'Nunito', 'Roboto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: transparent;
       }
 
-      /* Theme colors */
-      :root {
-        --logo-primary: #7dd3fc; /* logo blue */
-        --logo-accent:  #a78bfa; /* logo purple */
-        --bg-primary:  #1f4f70; /* much darker blue */
-        --bg-accent:   #4c348c; /* much darker purple */
+      #root, body > .app-root {
+        min-height: calc(var(--vh, 1vh) * 100);
+        height: calc(var(--vh, 1vh) * 100);
       }
 
-      /* Background container with darker gradient and black grid */
       .bg-grid {
         position: fixed;
         inset: 0;
@@ -74,6 +78,29 @@
         background-size: cover;
       }
 
+      @media (prefers-reduced-motion: no-preference) {
+        .bg-grid {
+          will-change: transform;
+          animation: bg-drift 18s linear infinite;
+        }
+
+        .bg-grid::before {
+          animation: radial-float 22s ease-in-out infinite;
+        }
+
+        @keyframes bg-drift {
+          0%{ transform: translate3d(0,0,0) scale(1); }
+          50%{ transform: translate3d(-2%, 1.5%, 0) scale(1.02); }
+          100%{ transform: translate3d(0,0,0) scale(1); }
+        }
+
+        @keyframes radial-float {
+          0%{ transform: translateY(0) translateX(0); opacity: 0.05; }
+          50%{ transform: translateY(-6%) translateX(3%); opacity: 0.08; }
+          100%{ transform: translateY(0) translateX(0); opacity: 0.05; }
+        }
+      }
+
       .bg-grid::before,
       .bg-grid::after {
         content: "";
@@ -82,14 +109,12 @@
         pointer-events: none;
       }
 
-      /* Optional subtle white overlay for depth */
       .bg-grid::before {
         background: radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 50%);
         mix-blend-mode: overlay;
         opacity: 0.05;
       }
 
-      /* BLACK grid lines */
       .bg-grid::after {
         background-image:
           linear-gradient(0deg, rgba(0,0,0,1) 1px, transparent 1px),
@@ -98,20 +123,150 @@
         mix-blend-mode: overlay;
         opacity: 1;
         z-index: 1;
+        transform-origin: center;
       }
 
       @media (max-width: 480px) {
         .bg-grid::after { background-size: 32px 32px; }
       }
+
+      .bg-accent-streak {
+        position: absolute;
+        inset: -30% -20% auto -20%;
+        height: 160%;
+        z-index: 0;
+        background: conic-gradient(from 120deg at 50% 50%, rgba(127, 211, 252, 0.12), rgba(167, 139, 250, 0.12));
+        filter: blur(40px);
+        opacity: 0.8;
+        pointer-events: none;
+        mix-blend-mode: screen;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .bg-accent-streak { animation: streak-rotate 28s linear infinite; }
+        @keyframes streak-rotate { 0%{ transform: rotate(0);} 100%{ transform: rotate(360deg);} }
+      }
+
+      .rotate-overlay {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 20px;
+        z-index: 9999;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.5));
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        font-size: 13px;
+        backdrop-filter: blur(6px);
+        transition: transform 260ms ease, opacity 260ms ease;
+      }
+      .rotate-overlay.hidden { opacity: 0; pointer-events: none; transform: translateY(10px); }
+
+      .visually-hidden{ position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .bg-grid, .bg-accent-streak { animation: none; }
+      }
+
+      .example-center {
+        min-height: calc(var(--vh, 1vh) * 100);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color: white;
+        text-align:center;
+        padding: 24px;
+      }
+
+      .logo {
+        color: white;
+        display:inline-flex;
+        gap: 10px;
+        align-items:center;
+        font-weight:700;
+        letter-spacing:0.4px;
+      }
+
+      .logo-mark{ width:40px; height:40px; border-radius:8px; background: linear-gradient(135deg,var(--logo-primary), var(--logo-accent)); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+
     </style>
   </head>
   <body>
-    <!-- Background grid -->
-    <div class="bg-grid"></div>
+    <div class="bg-grid" aria-hidden="true">
+      <div class="bg-accent-streak" aria-hidden="true"></div>
+    </div>
 
-    <!-- React root -->
-    <div id="root"></div>
+    <div id="rotate-overlay" class="rotate-overlay hidden" role="status" aria-live="polite">
+      
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div style="line-height:1;">
+        <div style="font-weight:600;">Tip</div>
+        <div style="opacity:0.9; font-size:12px;">Rotate your device for a wider viewing area</div>
+      </div>
+    </div>
 
+    <div id="root" class="app-root" aria-live="polite"></div>
+
+    <noscript>
+      <div style="background:#111;color:#fff;padding:12px;border-radius:8px;margin:14px;">JavaScript is required for the best experience on NekoTV. Please enable JavaScript in your browser settings.</div>
+    </noscript>
+
+    <script>
+      (function(){
+        function setVh() {
+          try {
+            var vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', vh + 'px');
+          } catch (e)
+        }
+
+        function handleOrientationHint() {
+          var overlay = document.getElementById('rotate-overlay');
+          if (!overlay) return;
+
+          var isSmall = window.matchMedia('(max-width: 800px)').matches;
+          var isPortrait = window.innerHeight > window.innerWidth;
+
+          if (isSmall && isPortrait) {
+            overlay.classList.remove('hidden');
+          } else {
+            overlay.classList.add('hidden');
+          }
+        }
+
+        function updateOrientationClasses(){
+          var isPortrait = window.innerHeight > window.innerWidth;
+          document.documentElement.classList.toggle('portrait', isPortrait);
+          document.documentElement.classList.toggle('landscape', !isPortrait);
+        }
+
+        var resizeTimer = null;
+        function onResize(){
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function(){ setVh(); handleOrientationHint(); updateOrientationClasses(); }, 120);
+        }
+
+        window.addEventListener('load', function(){ setVh(); handleOrientationHint(); updateOrientationClasses(); });
+        window.addEventListener('resize', onResize);
+        window.addEventListener('orientationchange', function(){ setTimeout(function(){ setVh(); handleOrientationHint(); updateOrientationClasses(); }, 180); });
+        window.NekoTV = window.NekoTV || {};
+        window.NekoTV.isPortrait = function(){ return document.documentElement.classList.contains('portrait'); };
+        if (screen.orientation && screen.orientation.lock) {
+          window.NekoTV.tryLockOrientation = function(orientation){
+            return screen.orientation.lock(orientation).catch(function(){ return false; });
+          };
+        }
+
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
