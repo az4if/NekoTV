@@ -29,14 +29,7 @@
     <meta property="og:image:height" content="350" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <meta name="screen-orientation" content="portrait">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="shortcut icon"
       href="/src/assets/favicon1.png"
@@ -56,7 +49,6 @@
         padding: 0;
         height: 100%;
         font-family: 'Nunito', 'Roboto', sans-serif;
-        overflow-x: hidden;
       }
 
       :root {
@@ -64,35 +56,6 @@
         --logo-accent:  #a78bfa;
         --bg-primary:  #1f4f70;
         --bg-accent:   #4c348c;
-      }
-
-      .rotate-message {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.9);
-        z-index: 9999;
-        color: white;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-        font-size: 1.2rem;
-      }
-      
-      .rotate-icon {
-        font-size: 3rem;
-        margin-bottom: 20px;
-        animation: rotate 2s infinite linear;
-      }
-      
-      @keyframes rotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(90deg); }
       }
 
       .bg-grid {
@@ -106,8 +69,6 @@
           radial-gradient(circle at 12% 18%, rgba(255,255,255,0.02), transparent 12%),
           linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-primary) 100%);
         background-size: cover;
-        
-        animation: gradientShift 20s ease infinite;
       }
 
       .bg-grid::before,
@@ -122,7 +83,6 @@
         background: radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 50%);
         mix-blend-mode: overlay;
         opacity: 0.05;
-        animation: pulse 15s ease-in-out infinite;
       }
 
       .bg-grid::after {
@@ -135,158 +95,15 @@
         z-index: 1;
       }
 
-      .particles {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: 0;
-      }
-      
-      .particle {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 50%;
-        animation: float 15s infinite linear;
-      }
-      
-      @keyframes gradientShift {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-      
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 0.03;
-        }
-        50% {
-          opacity: 0.07;
-        }
-      }
-      
-      @keyframes float {
-        0% {
-          transform: translateY(0) translateX(0) rotate(0deg);
-          opacity: 0;
-        }
-        10% {
-          opacity: 0.1;
-        }
-        90% {
-          opacity: 0.1;
-        }
-        100% {
-          transform: translateY(-1000%) translateX(1000%) rotate(720deg);
-          opacity: 0;
-        }
-      }
-
       @media (max-width: 480px) {
-        .bg-grid::after { 
-          background-size: 32px 32px; 
-        }
-        
-        @media (max-height: 500px) and (orientation: portrait) {
-          .rotate-message {
-            display: flex;
-          }
-        }
-      }
-
-      @media (max-width: 320px) {
-        .bg-grid::after { 
-          background-size: 24px 24px; 
-        }
+        .bg-grid::after { background-size: 32px 32px; }
       }
     </style>
   </head>
   <body>
-    <div class="rotate-message" id="rotateMessage">
-      <div class="rotate-icon">↻</div>
-      <h2>Rotate Your Device</h2>
-      <p>For the best viewing experience, please rotate your device to landscape mode.</p>
-    </div>
-
-    <div class="bg-grid">
-      <div class="particles" id="particlesContainer"></div>
-    </div>
-
+    <div class="bg-grid"></div>
     <div id="root"></div>
 
     <script type="module" src="/src/main.jsx"></script>
-    
-    <script>
-      function createParticles() {
-        const container = document.getElementById('particlesContainer');
-        const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
-        
-        for (let i = 0; i < particleCount; i++) {
-          const particle = document.createElement('div');
-          particle.classList.add('particle');
-          
-          const size = Math.random() * 6 + 2;
-          particle.style.width = `${size}px`;
-          particle.style.height = `${size}px`;
-          
-          particle.style.left = `${Math.random() * 100}%`;
-          particle.style.top = `${Math.random() * 100}%`;
-          
-          const duration = Math.random() * 20 + 10;
-          const delay = Math.random() * 20;
-          particle.style.animationDuration = `${duration}s`;
-          particle.style.animationDelay = `${delay}s`;
-          
-          container.appendChild(particle);
-        }
-      }
-      
-      function handleOrientation() {
-        const rotateMessage = document.getElementById('rotateMessage');
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobile) {
-          const isPortrait = window.innerHeight > window.innerWidth;
-          const isSmallScreen = window.innerHeight < 500;
-          
-          if (isPortrait && isSmallScreen) {
-            rotateMessage.style.display = 'flex';
-          } else {
-            rotateMessage.style.display = 'none';
-          }
-        }
-      }
-      
-      document.addEventListener('DOMContentLoaded', function() {
-        createParticles();
-        handleOrientation();
-        
-        window.addEventListener('resize', handleOrientation);
-        window.addEventListener('orientationchange', handleOrientation);
-      });
-      
-      document.addEventListener('touchstart', function(event) {
-        if (event.touches.length > 1) {
-          event.preventDefault();
-        }
-      }, { passive: false });
-      
-      let lastTouchEnd = 0;
-      document.addEventListener('touchend', function(event) {
-        const now = (new Date()).getTime();
-        if (now - lastTouchEnd <= 300) {
-          event.preventDefault();
-        }
-        lastTouchEnd = now;
-      }, false);
-    </script>
   </body>
 </html>
