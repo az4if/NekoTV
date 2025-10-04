@@ -12,7 +12,7 @@ const TermsOfService = () => {
             <section className="mb-8">
               <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">Acceptance of Terms</h2>
               <p className="text-neutral-300">
-                By using AniMix, you agree to these Terms of Service and acknowledge that they affect your legal rights and obligations.
+                By using NekoTV, you agree to these Terms of Service and acknowledge that they affect your legal rights and obligations.
               </p>
             </section>
             
