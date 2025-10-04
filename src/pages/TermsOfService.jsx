@@ -19,7 +19,7 @@ const TermsOfService = () => {
             <section className="mb-8">
               <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">Content</h2>
               <p className="text-neutral-300">
-                AniMix does not host video content but embeds videos from various third-party sources. We are not responsible for the content, quality, or the policies of these external sites.
+                NekoTV does not host video content but embeds videos from various third-party sources. We are not responsible for the content, quality, or the policies of these external sites.
               </p>
             </section>
             
