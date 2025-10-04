@@ -65,7 +65,7 @@ const Root = () => {
           <img
             src={banner}
             alt="banner"
-            className="w-64 md:w-96 lg:w-[350px] rounded-xl shadow-xl"
+            className="w-64 md:w-96 lg:w-[500px] rounded-xl shadow-xl"
           />
         </div>
 
