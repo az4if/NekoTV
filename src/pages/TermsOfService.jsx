@@ -46,7 +46,7 @@ const TermsOfService = () => {
             <section className="mb-8">
               <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">Intellectual Property</h2>
               <p className="text-neutral-300">
-                The intellectual property rights of the embedded videos remain with their respective owners. AniMix respects these rights and does not claim ownership of this content.
+                The intellectual property rights of the embedded videos remain with their respective owners. NekoTV respects these rights and does not claim ownership of this content.
               </p>
             </section>
             
