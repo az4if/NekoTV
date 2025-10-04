@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
             <section className="mb-8">
               <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">Data Collection</h2>
               <p className="text-neutral-300">
-                We collect minimal user data necessary for the functioning of AniMix, such as account information and user preferences.
+                We collect minimal user data necessary for the functioning of NekoTV, such as account information and user preferences.
               </p>
             </section>
             
@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
             <section className="mb-8">
               <h2 className="text-xl font-semibold text-[#89bcf8] mb-3">Cookies and Tracking</h2>
               <p className="text-neutral-300">
-                AniMix uses cookies and similar tracking technologies to enhance the user experience like caching video timestamps and tracking watched content.
+                NekoTV uses cookies and similar tracking technologies to enhance the user experience like caching video timestamps and tracking watched content.
               </p>
             </section>
             
