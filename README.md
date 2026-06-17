@@ -28,7 +28,7 @@
 - **Frontend**: React  
 - **Styling**: Tailwind CSS  
 - **State Management**: Context API / Redux  
-- **Data Source**: [NekoTV-API](https://github.com/jsmat0m/NekoTV-API)  
+- **Data Source**: [NekoTV-API](https://github.com/az4if/NekoTV-API)  
 
 ---
 
