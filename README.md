@@ -1,3 +1,14 @@
+> [!IMPORTANT]
+> ## 📦 This Repository is Now Archived
+>
+> **NekoTV is no longer actively maintained.** This project has been made a public archive — no further development, bug fixes, or updates will be made by the original authors.
+>
+> However, you are **welcome to fork this repository** and carry it forward however you like (within the terms of the [license](LICENSE.md)). Feel free to build on it, customize it, or take it in a new direction. The code is yours to explore.
+>
+> Thank you to everyone who supported and contributed to NekoTV. 💜
+
+---
+
 <!-- Title with gradient -->
 <h1 align="center">
   <span style="background: linear-gradient(90deg, #a29bfc, #89bcf8); -webkit-background-clip: text; color: transparent;">
